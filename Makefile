@@ -1,15 +1,18 @@
 # LaTeX Makefile
 FILE=main
+PDFLATEX=pdflatex
+BIBTEX=bibtex
 
-all: $(FILE).pdf
+TEX_SRC=main.tex
+BIB_SRC=main
+all:
+	${PDFLATEX} ${TEX_SRC}
+	${BIBTEX} ${BIB_SRC}
+	${PDFLATEX} ${TEX_SRC}
+	${PDFLATEX} ${TEX_SRC}
 
-.PHONY: clean
+refresh:
+	${PDFLATEX} ${TEX_SRC}
+
 clean:
-	\rm *.aux *.bbl *.log *.pdf *.blg
-
-$(FILE).pdf: $(FILE).tex
-	pdflatex $(FILE)
-	pdflatex $(FILE)
-	bibtex $(FILE)||true
-	pdflatex $(FILE)
-	pdflatex $(FILE)
+	@rm -f *.log *.aux *.pdf *.bbl *.blg
