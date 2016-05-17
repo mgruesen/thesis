@@ -1,2 +1,111 @@
 \chapter{INTRODUCTION}
 \label{intro}
+
+\section{Current Problems}
+
+Networking architecture has become the focus of many facets in computing
+with the increased reliance on data. As more and more devices become connected
+and users consume and generate data at an ever-increasing rate, the way we
+accomodate these changes in networking infrastructure has prompted the need
+for change. The conventional network switch is a fairly static, rigid device
+that utilizes two primary components, a control plane and data plane. In a
+network switch the control plane is responsible for the configuration and
+management of the data plane. Whereas the data plane is responsible for routing
+network traffic through a switch, also known as the forwarding path. These
+components have long been tightly coupled, where the control plane configures 
+the forwarding path at boot time and relies on configuration scripts and
+settings to orchestrate the applications, the network data they operate on, 
+and the physical resources available. This model has been sustainable, but is 
+quickly becoming a major roadblock in the evolution of networking switches. 
+For example, in a large data center, any downtime results in a loss of revenue 
+and the goal is to minimize the amount of time spent rebooting and
+reconfiguring switches as much as possible. The reason for this management
+model is due to the fact that data planes themselves lack the ability to be
+programmable, that is, they are not reactive. Forwarding decisions for packets
+rely on matching tables that map network traffic flows to some desired 
+behavior. These match tables are defined and managed by the control plane, but
+used by the data plane. When a table modification is needed, the control and
+data planes must be torn down and rebuilt to reflect the changes made. In
+order to overcome this hurdle control and data planes need to be programmable.
+
+Software Defined Networking (SDN) provides a framework to address the
+problems with conventional networking switches by introducing abstractions
+to help describe the major components of networking devices. The most prominent
+standard in this new networking paradigm is the OpenFlow (OF) [ref] protocol,
+which loosens the grip the control plane has over the forwarding plane by 
+viewing the data plane as an abstract machine. The abstraction describes the 
+forwarding path as a packet processing machine, capable of receiving,
+processing, and forwarding packets that enter a networking device. The two 
+components communicate through a messaging protocol to relay information. This
+protocol serves as an application binary interface (ABI) for network switch 
+applications by providing a north-bound interface to the control plane, and a 
+south-bound interface to the data plane.
+
+Even with the establishment of an abstract packet processing machine, there
+is still exist numerous problems with respect to programmability. The abstract 
+machine identifies the necessary components needed to procure the desired 
+functionality, but gives no standard model to program against. Network switch
+vendors do not have to conform to some ``standard'' when manufacturing these
+devices, and as a result there is a heavy amount of proprietary hardware that
+varies greatly between them. These proprietary components include hardware 
+accelerators for particular network processing functions, such as validation 
+(checksums), security (encryption/decryption), and packet processing (header
+decoders, matching tables). Though these capabilites are generally available
+in most devices, their implementation is unclear. Some of these constructs are
+handled in software, whereas others are offloaded at runtime to more well
+suited hardware components. The documentation for programming against these
+devices is sparse at best, and only adds the difficulties in attempts to
+accurately model how a networking application can be targeted to native
+hardware.
+
+From all of these problems emerges the need for network switch applications
+that can configure the control plane and also utilize the full potential of 
+the underlying hardware available to the data plane. Currently there exists
+no standard language capable of producing applications that address both of
+these problem sets, yet this functionality is becoming highly desireable.
+Reliance on vendor applications to fulfill the needs of an increasing customer
+base breeds a sort of stagnation, where users must wait until a manufacturer
+provides the flexibility and functionality desired. Generic end-user
+applications rarely satisfy \emph{all} of the needs of a particular consumer, 
+and the ability to create customized applications that perform efficiently 
+would allow for users to build something that works for \emph{them}. This 
+concept is akin to the creation of user applications for general purpose 
+computing devices, CPUs, which support a large set of higher level languages 
+that can be lowered to a well-defined interface that can utilize the 
+capabilities and features present in a general purpose machine. In order to
+create said customized networking applications, networking devices need to be
+more open and programmable.
+
+Though there exist numerous general purpose high level programming languages
+that provide constructs and abstractions in order to create applications for
+general purpose machines, there exist very few that attempt to tackle the
+problem of providing basic networking programming requirements. Network
+programming languages build on a primitive instruction set architectures,
+(ISAs), that provide arithmetic, logical, and control flow instructions.
+However in order to fulfill the requirements of the network programming domain
+they need to accomodate networking constructs such as protocol headers and 
+match tables. Protocol headers vary greatly, and the language must provide
+a mechanism to extract the fields within these headers efficiently. The main
+issue with protocol header extraction is that many of these fields do not
+align to standard ISA word sizes, that is, they tend to not be byte (8-bit)
+aligned. Fields can be contained in 2-bit (e.g. Ethernet Type) or even 48-bit
+regions (e.g. Ethernet MAC addresses).
+
+\section{Current Solutions}
+
+
+\section{Contributions}
+
+\subsection{What was done?}
+
+\subsection{What is novel?}
+
+\subsection{What was done better?}
+
+\subsection{What was discovered?}
+
+\section{Successes \& Failures}
+
+\subsection{What didn't work?}
+
+\subsection{Why didn't it work?}
