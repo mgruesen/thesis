@@ -1,7 +1,7 @@
 \chapter{INTRODUCTION}
 \label{intro}
 
-\section{Current Problems}
+\section{Motivation}
 
 Networking architecture has become the focus of many facets in computing
 with the increased reliance on data. As more and more devices become connected
@@ -95,53 +95,89 @@ align to standard ISA word sizes [refs], that is, they tend to not be byte
 of matching tables, where the key used to identify entries in the table 
 generally has a size equal to size of fields in a header.
 
+It is clear that traditional networking methods are nearing the end of their
+sustainability, and that there is a need to evolve networking infrastructure
+into something that is more well suited for the current and future needs of
+consumers. Networking infrastructure needs to be more flexible, and allow 
+network administrators to shape and mold their systems based on their
+particular needs. In order to achieve this next step there is a need for a
+high level programming language that supports networking constructs and
+a native architecture that can implement the needs of the language. This
+architecture must provide the physical and logical resources required by
+applications through an ABI, allowing developers to program against a much
+more concrete networking device.
+
 \section{Current Solutions}
 
 \subsection{Languages}
+In the domain of SDN many other researchers identify the need for a high level
+programming language capable of encapsulating networking programming 
+functionality that produces custom networking applications for networking 
+devices. These implementations vary in terms of approach, as there is currently
+no standard networking device abstraction that can be easily targeted. Some 
+focus primarily on packet header decoders, while others focus more on how match
+tables are represented and utilized. Below is a listing and description of 
+some of the more well established SDN programming languages currently being
+developed.
 \begin{itemize}
-\item P4
-\item POF
-\item PIF
-\item Frenetic?
+\item \emph{P4} - Programming Protocol-Independent Packet Processors.
+\item \emph{POF} - Protocol Oblivious Forwarding.
+\item \emph{Frenetic}
 \end{itemize}
 
+\subsubsection{P4}
+
+\subsubsection{POF}
+
+\subsubsection{Frenetic}
+
+
 \subsection{Architectures}
+Even with the establishment of a suitable high level programming langauge for
+networking applications, these applications need some target framework to 
+target. In order to provide some uniformity in terms of architecture, the 
+common approach is to create a runtime environment, or virtual machine, to 
+execute networking applications. 
 \begin{itemize}
-\item DPDK
-\item ODP
-\item OVS
+\item \emph{DPDK} - Data Plane Development Kit.
+\item \emph{ODP} - Open Data Plane.
+\item \emph{OVS} - Open Virtual Switch, or OpenVSwitch.
+\item \emph{HSA} - Heterogeneous System Architecture.
 \end{itemize}
+
+\subsubsection{DPDK}
+
+\subsubsection{ODP}
+
+\subsubsection{OVS}
+
+\subsubsection{HSA}
 
 \section{Contributions}
 
-\subsection{What was done?}
-\subsubsection{Steve}
-\begin{itemize}
-\item Steve Applications
-\item Steve Compiler
-\item LLVM
-\end{itemize}
+\subsection{Steve}
+\subsubsection{Steve Applications}
+\subsubsection{Steve Compiler}
+\subsubsection{LLVM}
 
-\subsubsection{FFVM}
-\begin{itemize}
-\item Ports
-\item Tables
-\item Packet + Context
-\item Instructions
-\item Memory
-\item Threading
-\end{itemize}
 
+\subsection{Freeflow}
+\subsubsection{Virtual Machine}
 \subsubsection{Runtime Support Library}
+
 
 \subsection{What is novel?}
 
 \subsection{What was done better?}
-
+\begin{itemize}
+\item language that guarantees safety
+\item utilize an extensible IR (llvm), intrinsics
+\item adaptable runtime environment, optimizations
 \subsection{What was discovered?}
 
 \section{Successes \& Failures}
 
 \subsection{What didn't work?}
-
+Lots.
 \subsection{Why didn't it work?}
+It was wrong.
