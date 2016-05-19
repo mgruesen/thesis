@@ -45,18 +45,18 @@ Even with the establishment of an abstract packet processing machine, there
 is still exist numerous problems with respect to programmability. The abstract 
 machine identifies the necessary components needed to procure the desired 
 functionality, but gives no standard model to program against. Network switch
-vendors do not have to conform to some ``standard'' when manufacturing these
-devices, and as a result there is a heavy amount of proprietary hardware that
+vendors do not have to conform to any ``standard'' when manufacturing these
+devices, and as a result there is a vast amount of proprietary hardware that
 varies greatly between them. These proprietary components include hardware 
 accelerators for particular network processing functions, such as validation 
 (checksums), security (encryption/decryption), and packet processing (header
-decoders, matching tables). Though these capabilites are generally available
-in most devices, their implementation is unclear. Some of these constructs are
-handled in software, whereas others are offloaded at runtime to more well
-suited hardware components. The documentation for programming against these
-devices is sparse at best, and only adds the difficulties in attempts to
-accurately model how a networking application can be targeted to native
-hardware.
+decoders, matching tables, FPGAs). Though these capabilites are generally 
+available in most devices, their implementation is unclear. Parts of this 
+functionality is handled in software, whereas others are offloaded at runtime 
+to more well suited hardware components. The documentation for programming 
+against these devices is sparse at best, and only adds the difficulties in 
+attempts to accurately model how a networking application can be targeted to 
+native hardware.
 
 From all of these problems emerges the need for network switch applications
 that can configure the control plane and also utilize the full potential of 
@@ -84,19 +84,55 @@ programming languages build on a primitive instruction set architectures,
 (ISAs), that provide arithmetic, logical, and control flow instructions.
 However in order to fulfill the requirements of the network programming domain
 they need to accomodate networking constructs such as protocol headers and 
-match tables. Protocol headers vary greatly, and the language must provide
-a mechanism to extract the fields within these headers efficiently. The main
-issue with protocol header extraction is that many of these fields do not
-align to standard ISA word sizes, that is, they tend to not be byte (8-bit)
-aligned. Fields can be contained in 2-bit (e.g. Ethernet Type) or even 48-bit
-regions (e.g. Ethernet MAC addresses).
+match tables. 
+
+Protocol headers vary greatly, and the language must provide the means to 
+represent and extract the fields within these headers efficiently. The main 
+issue with protocol header extraction is that many of these fields do not 
+align to standard ISA word sizes [refs], that is, they tend to not be byte 
+(8-bit) aligned. Fields can be contained in 2-bit (e.g. Ethernet Type) or even 
+48-bit regions (e.g. Ethernet MAC addresses). The same issue arises in the case
+of matching tables, where the key used to identify entries in the table 
+generally has a size equal to size of fields in a header.
 
 \section{Current Solutions}
 
+\subsection{Languages}
+\begin{itemize}
+\item P4
+\item POF
+\item PIF
+\item Frenetic?
+\end{itemize}
+
+\subsection{Architectures}
+\begin{itemize}
+\item DPDK
+\item ODP
+\item OVS
+\end{itemize}
 
 \section{Contributions}
 
 \subsection{What was done?}
+\subsubsection{Steve}
+\begin{itemize}
+\item Steve Applications
+\item Steve Compiler
+\item LLVM
+\end{itemize}
+
+\subsubsection{FFVM}
+\begin{itemize}
+\item Ports
+\item Tables
+\item Packet + Context
+\item Instructions
+\item Memory
+\item Threading
+\end{itemize}
+
+\subsubsection{Runtime Support Library}
 
 \subsection{What is novel?}
 
