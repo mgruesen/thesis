@@ -1,7 +1,7 @@
 \chapter{INTRODUCTION}
 \label{intro}
 
-\section{Motivation}
+\section{Problem Statement}
 
 Networking architecture has become the focus of many facets in computing
 with the increased reliance on data. As more and more devices become connected
@@ -107,7 +107,73 @@ architecture must provide the physical and logical resources required by
 applications through an ABI, allowing developers to program against a much
 more concrete networking device.
 
+\section{Goals}
+From all of the problems found during our investigation, it became clear that
+there was a need for a high level programming language that supported 
+extensions into the domain of network programming. The language needs to be
+flexible enough to accomodate common programming language features and 
+networking domain specific concepts, but also provide safety guarantees to 
+curtail undefined behavior, as much as possible, and produce well formed 
+applications. Also the language needs to allow the programmer to define 
+behavior across both components in a switch, the control and data planes. This 
+also helped define the requirements of the target machine for these networking 
+applications. The runtime needs to be fully programmable and execute these 
+programs on native hardware. By utilizing a virtual machine as the execution 
+environment, the runtime is able to be mapped to a variety of architectures 
+and take advantage of any and all hardware optimizations present.
+
+\section{Contributions}
+We decided to tackle the problem of creating programming networking applications from both ends simultaneously, that is, from the top down 
+(language) and the bottom up (runtime). 
+
+\subsection{Steve}
+The Steve programming language is a general purpose language with
+extensions that support network application programming. In addition to
+many common language features (types, objects, functions) Steve provides
+mechanims to write packet processing programs such as packet header decoders to
+extract information and match action tables to define behavior. The language 
+also provides safety guarentees to ensure applications are not illformed and
+will always be able to run to completion.
+
+\subsubsection{Steve Applications}
+Steve applications allow programs to create applications that facilitate the 
+logical decoupling of the control and data planes in a network switch. Control 
+logic is handled by way of event handlers, which respond to exceptional events 
+that occur during application exection. Packet processing behavior in the data 
+plane is described using packet header decoders, match action tables, and the 
+ability to raise events to the control plane when necessary.
+
+\subsubsection{Steve Compiler}
+The Steve compiler translates high level Steve source code down to C shared object libraries that can be loaded and executed in the Freeflow environment. We utilize Clang's Low Level Virtual Machine (LLVM) and it's intermediate representation (IR) as a way to apply optimizations and program analysis in an architecture independent manner. 
+
+\subsection{Freeflow}
+Freeflow is our software implementation of a network switch on which compiled
+Steve applications can be loaded and executed. The system has two major components needed by applications, a runtime environment to target which we
+call the Freeflow Virtual Machine (FFVM), and a system interface which
+applications can be programmed against. 
+
+\subsubsection{Virtual Machine}
+FFVM is a process that provides the resources necessary for Steve applications
+to execute. In particular, these resources are:
+
+\begin{itemize}
+\item \emph{Ports} - The source of I/O for applications.
+\item \emph{Tables} - Matching data structures that define forwarding behavior.
+\item \emph{Packet Context} - Contextual information about a packet.
+\item \emph{Action Exection} - Native FFVM instructions to be executed by the runtime.
+\item \emph{Memory} - Packet Context buffers.
+\item \emph{Threading} - Infrastructure for modeling applications in various threading architectures.
+\end{itemize}
+
+\subsubsection{Runtime Support Library}
+Freeflow provides a runtime support library that Steve applications can leverage to execute as efficiently as possible. The library houses a collection
+of system calls, exposed as external C functions, to allow applications to call
+into the system during execution.
+
 \section{Current Solutions}
+There exist many approaches to dealing with the numerous problems present in
+developing network applications. Below is a brief overview of the more mature implementation strategies currently being developed to solve these problems. In
+particular we focus on the language and architecture components.
 
 \subsection{Languages}
 In the domain of SDN many other researchers identify the need for a high level
@@ -118,26 +184,20 @@ no standard networking device abstraction that can be easily targeted. Some
 focus primarily on packet header decoders, while others focus more on how match
 tables are represented and utilized. Below is a listing and description of 
 some of the more well established SDN programming languages currently being
-developed.
+developed. Further descriptions of these languages can be found in Chapter \ref{related}.
 \begin{itemize}
 \item \emph{P4} - Programming Protocol-Independent Packet Processors.
 \item \emph{POF} - Protocol Oblivious Forwarding.
 \item \emph{Frenetic}
 \end{itemize}
 
-\subsubsection{P4}
-
-\subsubsection{POF}
-
-\subsubsection{Frenetic}
-
-
 \subsection{Architectures}
 Even with the establishment of a suitable high level programming langauge for
 networking applications, these applications need some target framework to 
 target. In order to provide some uniformity in terms of architecture, the 
 common approach is to create a runtime environment, or virtual machine, to 
-execute networking applications. 
+execute networking applications. Again, a more complete description of these
+systems can be found in Chapter \ref{related}.
 \begin{itemize}
 \item \emph{DPDK} - Data Plane Development Kit.
 \item \emph{ODP} - Open Data Plane.
@@ -145,39 +205,56 @@ execute networking applications.
 \item \emph{HSA} - Heterogeneous System Architecture.
 \end{itemize}
 
-\subsubsection{DPDK}
+\section{False Starts}
+Throughout the development of this project there were a few implementation
+methods that did not end up panning out. Each approach has their own pros
+and cons, and are highlighted in the follow sections.
 
-\subsubsection{ODP}
+\subsection{DPDK}
+Intel's DPDK provided users with a framework on which data plane applications
+could be built utilizing highly optimized constructs and device drivers. The
+examples laid out in the documentation is promising, and the desire to have
+low level access to underlying hardware in a system is more than satisfied
+in this impelementation. However, there were a few road blocks on the path to
+embracing this powerful data plane runtime environment. First and foremost, the
+device drivers provided were specifically written for Intel brand hardware. If
+there is no genuine Intel network inferface cards (NICs), a virtual machine
+would be necessary in order to emulate their functionality and be able to take
+advantage of the low level functionality, such as direct access to raw 
+ethernet packet data. At the time we were investigating this approach, DPDK was
+more in it's infancy (release 1.0, 1.1), and though there was a decent amount 
+of documentation, the usage of their system was not very intuitive. Lastly 
+there was the issue of language support, DPDK can only build C applications 
+using GCC as C++ support is only available with the usage of Intel's C++ 
+compiler. The combination of all these issues led us to stray away from 
+targeting DPDK as our runtime environment.
 
-\subsubsection{OVS}
+\subsection{RISC V}
+Our next approach focused more on the interaction between the language and 
+runtime components of our system, with the hopes of being able to execute
+the language in a native ISA. We came across an extensible ISA, RISC V, that
+provided not only basic arithmetic, logical, and control flow instructions but
+also left room for a number of custom instructions. This seemed like a great
+way to incorporate specialized network programming instructions into a native
+format. Unfortionately, this would also require that we interpret and implement
+all of the supported instructions in the set in an virtual machine. As a result
+the execution took a serious hit in terms of performance at the cost of this
+flexibility. This project requires a fine balance of flexibility and 
+performance, and the deviation between these properties was too great.
 
-\subsubsection{HSA}
-
-\section{Contributions}
-
-\subsection{Steve}
-\subsubsection{Steve Applications}
-\subsubsection{Steve Compiler}
-\subsubsection{LLVM}
-
-
-\subsection{Freeflow}
-\subsubsection{Virtual Machine}
-\subsubsection{Runtime Support Library}
-
-
-\subsection{What is novel?}
-
-\subsection{What was done better?}
-\begin{itemize}
-\item language that guarantees safety
-\item utilize an extensible IR (llvm), intrinsics
-\item adaptable runtime environment, optimizations
-\subsection{What was discovered?}
-
-\section{Successes \& Failures}
-
-\subsection{What didn't work?}
-Lots.
-\subsection{Why didn't it work?}
-It was wrong.
+\subsection{C}
+One of the last approaches was much more successful, where we decided to 
+implement our own runtime environment for our language to target and rather
+than utilize some custom ISA, we embraced the C programming language as it
+is widely supported and can execute efficiently and natively on nearly any
+system. Development went well for a few months, and we produced a functional
+data plane runtime system that could dynamically load C shared object files as 
+applications and execute them. In the proof of concept case this was 
+promising, however when more complex applications were considered it soon 
+became clear that there were some major limitations coming from the 
+implementation language. This was largely due to the fact that in order to have data structures and algorithms for different object types, they had to
+be manually implemented. The time cost it was taking to hand roll all of these
+data structures and algorithms efficiently was excessive, and slowed progress.
+Although C is very powerful and provides great portability and performance, the
+lack of support for abstraction turned out to be a major complication for the
+implementation of the runtime system.
