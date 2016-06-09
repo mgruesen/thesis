@@ -7,6 +7,7 @@ TEX_SRC=main.tex
 BIB_SRC=main
 all:
 	${PDFLATEX} ${TEX_SRC}
+	${PDFLATEX} ${TEX_SRC}
 	${BIBTEX} ${BIB_SRC}
 	${PDFLATEX} ${TEX_SRC}
 	${PDFLATEX} ${TEX_SRC}

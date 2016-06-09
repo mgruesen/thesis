@@ -1,26 +1,12 @@
-\chapter{FREEFLOW}
-\label{ff}
+\chapter{Software Defined Networking}
+\label{sdn}
+SDN provides a networking device model where the control and data planes are decoupled from one another, where a single control plane is responsible for distributing application execution across a set of network switches viewed as a unified data plane instance. Applications generally operate at the control plane level and rely on distributed platforms, such as OpenVSwitch (OVS) \ref{ovs}, to push the logic down to the hardware level.
 
-\begin{figure}[h]
-\centering
-\includegraphics[scale=0.65]{ff_system}
-\caption{The Freeflow System Overview.}
-\label{fig:ff_sys}
-\end{figure}
+\section{Networking Applications}
+\label{sdn:apps}
+Not all networking applications operate in the same conceptual space, that is, they generally act as a part of a larger system. Applications can operate on a particular traffic flow, a node within a network, or across the entire network.
 
-\section{Architecture}
-\label{ff:arch}
-\begin{figure}[h]
-\centering
-\includegraphics[scale=0.5]{ff_arch}
-\caption{The Freeflow System Architecture}
-\label{fig:ff_arch}
-\end{figure}
 
-\section{Virtual Machine}
-\label{ff:vm}
-Freeflow Virtual Machine.
-
-\section{Runtime Support Library}
-\label{ff:runtime}
-System interface.
+\section{OpenFlow}
+\label{sdn:of}
+The OpenFlow model defines a messaging layer that the control and, potentially distributed, data plane(s) can communicate through. This is embodied in the OpenFlow Protocol, which specifies a set of ``instructions'' that the control and data planes must support. 
