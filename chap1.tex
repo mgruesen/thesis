@@ -1,49 +1,49 @@
 \chapter{INTRODUCTION}
 \label{intro}
 
-Networking architecture has become the focus of many facets in computing with 
-an increased reliance on network data. As more and more devices become 
-connected and users produce and consume data at an ever-increasing rate, the 
-way we accomodate these needs in networking infrastructure has prompted the 
-need for change. In order to service the needs of users, network engineers 
-require more functionality from their equipment than basic switching and 
-routing. Their networks need to be more intelligent, and allow for more 
-powerful user generated network applications. Unfortunately conventional 
-network switching devices are fairly static and rigid, and do not provide the 
-means to network engineers to create custom applications that suit their 
-particular needs. A network switch is composed of two high level components, a 
-control plane and a forwarding, or data, plane. The control plane manages the 
-configuration and state of the device, as well as compiled application 
-tenancy; whereas the data plane is responsible for executing forwarding 
-behavior over network traffic flows in the system. These components are 
-tightly coupled which hinders how a network application might be able to 
-abstract their functionality. At the upper level, control plane management is, 
-more or less, a fairly open entity. Users can configure their networks and 
-applications running on them within the confines of the interface exposed by 
-that particular switch vendor. To apply changes made in the control plane, 
-which may alter the configuration of the data plane, usually the device must 
-be rebooted. Most changes made to resources used by the data plane and 
-applications can only occur when the system is starting up. This has much to 
-do with the fact that the applications running on these devices are created by 
-the vendors themselves, who understand the underlying architecture in the 
-system and are able to push the application logic down into the hardware. The 
-result is high performance networking applications, that utilize hardware 
-accelerators and are tuned for that particular system. However this comes at a 
-great cost, flexibility. Network engineers are at the mercy of networking 
-device manufacturers when they want to mold their network to suit their needs. 
-The data plane in a network switch remains a black box, with features and 
-capabilities varying greatly between vendors. This lack of transparency makes 
-it difficult to model an abstract machine that can be targeted by networking 
-applications. 
+Networking architecture has become the focus of many facets in computing with
+an increased reliance on network data. As more and more devices become
+connected and users produce and consume data at an ever-increasing rate, the
+way we accomodate these needs in networking infrastructure has prompted the
+need for change. In order to service the needs of users, network engineers
+require more functionality from their equipment than basic switching and
+routing. Their networks need to be more intelligent, and allow for more
+powerful user generated network applications. Unfortunately conventional
+network switching devices are fairly static and rigid, and do not provide the
+means to network engineers to create custom applications that suit their
+particular needs. A network switch is composed of two high level components, a
+control plane and a forwarding, or data, plane. The control plane manages the
+configuration and state of the device, as well as compiled application
+tenancy; whereas the data plane is responsible for executing forwarding
+behavior over network traffic flows in the system. These components are
+tightly coupled which hinders how a network application might be able to
+abstract their functionality. At the upper level, control plane management is,
+more or less, a fairly open entity. Users can configure their networks and
+applications running on them within the confines of the interface exposed by
+that particular switch vendor. To apply changes made in the control plane,
+which may alter the configuration of the data plane, usually the device must
+be rebooted. Most changes made to resources used by the data plane and
+applications can only occur when the system is starting up. This has much to
+do with the fact that the applications running on these devices are created by
+the vendors themselves, who understand the underlying architecture in the
+system and are able to push the application logic down into the hardware. The
+result is high performance networking applications, that utilize hardware
+accelerators and are tuned for that particular system. However this comes at a
+great cost, flexibility. Network engineers are at the mercy of networking
+device manufacturers when they want to mold their network to suit their needs.
+The data plane in a network switch remains a black box, with features and
+capabilities varying greatly between vendors. This lack of transparency makes
+it difficult to model an abstract machine that can be targeted by networking
+applications.
 
-Research in the domain of Software Defined Networking (SDN) investigates the decoupling of the two planes, giving users the ability to create networking applications that can respond to changes in network traffic flows in real time. The emphasis in this model is to allow a single control plane to manage numerous data planes in one or many switches as a unified entity. Most of the work in this field revolves primarily around virtual network switches, building on concepts provided by the OpenFlow specification \ref{of}. We chose to focus on the implementation of a single programmable network device, where the control and data plane exist within the same system. This allowed us to produce a specification for an abstract machine for networking applications. The machine defines memory and object models, program execution semantics, a set of required operations, access to guaranteed resources, and the types of objects that it operates on and their behaviors. It must also be able to support a variety of high level programming languages as well as platforms and network processor architectures. Optimization support for specialized instruction execution and offloading compuation to hardware accelerators and/or co-processors is also a key requirement to keep performance on par. Languages are able to interact with the virtual machine through an application binary interface (ABI), that defines symbols and rules that dictate how they can utilize the runtime system. This approach has produced an instance of an abstract machine that provides the necessary resources and capabilities required to support network application execution.
+Research in the domain of Software Defined Networking (SDN) investigates the decoupling of the two planes, giving users the ability to create networking applications that can respond to changes in network traffic flows in real time. The emphasis in this model is to allow a single control plane to manage numerous data planes in one or many switches as a unified entity. Most of the work in this field revolves primarily around virtual network switches, building on concepts provided by the OpenFlow specification \ref{openflow}. We chose to focus on the implementation of a single programmable network device, where the control and data plane exist within the same system. This allowed us to produce a specification for an abstract machine for networking applications. The machine defines memory and object models, program execution semantics, a set of required operations, access to guaranteed resources, and the types of objects that it operates on and their behaviors. It must also be able to support a variety of high level programming languages as well as platforms and network processor architectures. Optimization support for specialized instruction execution and offloading compuation to hardware accelerators and/or co-processors is also a key requirement to keep performance on par. Languages are able to interact with the virtual machine through an application binary interface (ABI), that defines symbols and rules that dictate how they can utilize the runtime system. This approach has produced an instance of an abstract machine that provides the necessary resources and capabilities required to support network application execution.
 
 
 
 % The conventional network switch is a fairly static, rigid device
 % that utilizes two primary components, a control plane and data plane. In a
 % network switch the control plane is responsible for the configuration and
-% management of the data plane. Whereas the data plane is responsible for 
+% management of the data plane. Whereas the data plane is responsible for
 % routing
 % network traffic through a switch, also known as the forwarding path. These
 % components have long been tightly coupled, where the control plane configures
@@ -51,38 +51,38 @@ Research in the domain of Software Defined Networking (SDN) investigates the dec
 % settings to orchestrate the applications, the network data they operate on,
 % and the physical resources available. This model has been sustainable, but is
 % quickly becoming a major roadblock in the evolution of networking switches.
-% For example, in a large data center, any downtime results in a loss of 
+% For example, in a large data center, any downtime results in a loss of
 % revenue
 % and the goal is to minimize the amount of time spent rebooting and
 % reconfiguring switches as much as possible. The reason for this management
 % model is due to the fact that data planes themselves lack the ability to be
-% programmable, that is, they are not reactive. Forwarding decisions for 
+% programmable, that is, they are not reactive. Forwarding decisions for
 % packets
 % rely on matching tables that map network traffic flows to some desired
-% behavior. These match tables are defined and managed by the control plane, 
+% behavior. These match tables are defined and managed by the control plane,
 % but
 % used by the data plane. When a table modification is needed, the control and
 % data planes must be torn down and rebuilt to reflect the changes made. In
-% order to overcome this hurdle control and data planes need to be 
+% order to overcome this hurdle control and data planes need to be
 % programmable.
 
 % Software Defined Networking (SDN) provides a framework to address the
 % problems with conventional networking switches by introducing abstractions
-% to help describe the major components of networking devices. The most 
+% to help describe the major components of networking devices. The most
 % prominent
 % standard in this new networking paradigm is the OpenFlow (OF) [ref] protocol,
 % which loosens the grip the control plane has over the forwarding plane by
 % viewing the data plane as an abstract machine. The abstraction describes the
 % forwarding path as a packet processing machine, capable of receiving,
 % processing, and forwarding packets that enter a networking device. The two
-% components communicate through a messaging protocol to relay information. 
+% components communicate through a messaging protocol to relay information.
 % This
 % protocol serves as an application binary interface (ABI) for network switch
 % applications by providing a north-bound interface to the control plane, and a
 % south-bound interface to the data plane.
 
 % Even with the establishment of an abstract packet processing machine, there
-% is still exist numerous problems with respect to programmability. The 
+% is still exist numerous problems with respect to programmability. The
 % abstract
 % machine identifies the necessary components needed to procure the desired
 % functionality, but gives no standard model to program against. Network switch
@@ -104,7 +104,7 @@ Research in the domain of Software Defined Networking (SDN) investigates the dec
 % the underlying hardware available to the data plane. Currently there exists
 % no standard language capable of producing applications that address both of
 % these problem sets, yet this functionality is becoming highly desireable.
-% Reliance on vendor applications to fulfill the needs of an increasing 
+% Reliance on vendor applications to fulfill the needs of an increasing
 % customer
 % base breeds a sort of stagnation, where users must wait until a manufacturer
 % provides the flexibility and functionality desired. Generic end-user
@@ -124,7 +124,7 @@ Research in the domain of Software Defined Networking (SDN) investigates the dec
 % problem of providing basic networking programming requirements. Network
 % programming languages build on a primitive instruction set architectures,
 % (ISAs), that provide arithmetic, logical, and control flow instructions.
-% However in order to fulfill the requirements of the network programming 
+% However in order to fulfill the requirements of the network programming
 % domain
 % they need to accomodate networking constructs such as protocol headers and
 % match tables.
@@ -133,9 +133,9 @@ Research in the domain of Software Defined Networking (SDN) investigates the dec
 % represent and extract the fields within these headers efficiently. The main
 % issue with protocol header extraction is that many of these fields do not
 % align to standard ISA word sizes [refs], that is, they tend to not be byte
-% (8-bit) aligned. Fields can be contained in 2-bit (e.g. Ethernet Type) or 
+% (8-bit) aligned. Fields can be contained in 2-bit (e.g. Ethernet Type) or
 % even
-% 48-bit regions (e.g. Ethernet MAC addresses). The same issue arises in the 
+% 48-bit regions (e.g. Ethernet MAC addresses). The same issue arises in the
 % case
 % of matching tables, where the key used to identify entries in the table
 % generally has a size equal to size of fields in a header.
@@ -156,16 +156,16 @@ Research in the domain of Software Defined Networking (SDN) investigates the dec
 Be broader about the topics brought up in the problem statement.
 
 \section{Goals}
-It becomes clear that there is need for runtime support for compiled 
-networking applications. The virtual machine needed to provide functionality 
-for both parts of a network switch, the control and data planes, and allow 
-applications to have control and access to these resources at the user level. 
-In addition to servicing the needs of applications, the runtime needed to be 
-targetable on a variety of architectures and utilize the physical and logical 
-resources available. 
+It becomes clear that there is need for runtime support for compiled
+networking applications. The virtual machine needed to provide functionality
+for both parts of a network switch, the control and data planes, and allow
+applications to have control and access to these resources at the user level.
+In addition to servicing the needs of applications, the runtime needed to be
+targetable on a variety of architectures and utilize the physical and logical
+resources available.
 
 \section{Contributions}
-The contributions presented in this thesis are... 
+The contributions presented in this thesis are...
 
 Design, implementation, experimentation.
 
@@ -192,7 +192,7 @@ threading architectures.
 \end{itemize}
 
 \subsection{Runtime Support Library}
-Freeflow provides a runtime support library that Steve applications can 
+Freeflow provides a runtime support library that Steve applications can
 leverage to execute as efficiently as possible. The library houses a collection
 of system calls, exposed as external C functions, to allow applications to call
 into the system during execution. These system calls allow the runtime to map the execution of certain instructions to the most appropriate computational device present and provide access to guaranteed resources.
@@ -200,11 +200,3 @@ into the system during execution. These system calls allow the runtime to map th
 \section{Road Map}
 % Write a short paragraph about each topic.
 This paper covers our initial work towards a fully programmable networking device. The topics covered are:
-\begin{itemize}
-\item Software Defined Networking - Chapter \ref{sdn}.
-\item The Freeflow System Architecture - Chapter \ref{ff}.
-\item The Freeflow Virutal Machine - Chapter \ref{vm}.
-\item Runtime Support - Chapter \ref{rt}.
-\item Experimentation - Chapter \ref{expr}.
-\item Related Works - Chapter \ref{related}.
-\end{itemize}
