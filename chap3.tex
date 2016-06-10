@@ -1,12 +1,31 @@
-\chapter{FREEFLOW}
-\label{ff}
-Freeflow is an instance of a virtual networking device that provides full programmability over the two major components of a network switch, the control and data planes. 
+\chapter{EARLY INVESTIGATIONS}
+\label{invest}
+What didn't work and why.
 
-\section{Control Plane}
-\label{ff:cp}
+\section{DPDK}
+\label{invest:dpdk}
+Intel's DPDK provided users with a framework on which data plane applications
+could be built utilizing highly optimized constructs and device drivers. The
+examples laid out in the documentation is promising, and the desire to have
+low level access to underlying hardware in a system is more than satisfied
+in this impelementation. However, there were a few road blocks on the path to
+embracing this powerful data plane runtime environment. First and foremost, the
+device drivers provided were specifically written for Intel brand hardware. If
+there is no genuine Intel network inferface cards (NICs), a virtual machine
+would be necessary in order to emulate their functionality and be able to take
+advantage of the low level functionality, such as direct access to raw
+ethernet packet data. At the time we were investigating this approach, DPDK was
+more in it's infancy (release 1.0, 1.1), and though there was a decent amount
+of documentation, the usage of their system was not very intuitive. Lastly
+there was the issue of language support, DPDK can only build C applications
+using GCC as C++ support is only available with the usage of Intel's C++
+compiler. The combination of all these issues led us to stray away from
+targeting DPDK as our runtime environment.
 
-\section{Data Plane}
-\label{ff:dp}
+\section{Instruction Set Architectures}
+\label{invest:isa}
+Started making our own, gave up when we got to branches, jumps, logical/arith shifts, etc.
 
-\section{Applications}
-\label{ff:app}
+\section{Native Execution}
+\label{invest:native}
+To execute native code what resources do you need to provide?

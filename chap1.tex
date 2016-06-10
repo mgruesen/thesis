@@ -1,11 +1,6 @@
 \chapter{INTRODUCTION}
 \label{intro}
 
-
-
-
-%\section{Problem Statement}
-
 Networking architecture has become the focus of many facets in computing with 
 an increased reliance on network data. As more and more devices become 
 connected and users produce and consume data at an ever-increasing rate, the 
@@ -157,6 +152,9 @@ Research in the domain of Software Defined Networking (SDN) investigates the dec
 % applications through an ABI, allowing developers to program against a much
 % more concrete networking device.
 
+\section{Background}
+Be broader about the topics brought up in the problem statement.
+
 \section{Goals}
 It becomes clear that there is need for runtime support for compiled 
 networking applications. The virtual machine needed to provide functionality 
@@ -166,21 +164,11 @@ In addition to servicing the needs of applications, the runtime needed to be
 targetable on a variety of architectures and utilize the physical and logical 
 resources available. 
 
-% It becomes clear that there is a need for high level programming language
-% that supported extensions into the domain of network programming. 
-% The language
-% needs to be flexible enough to accomodate common programming language features
-% and networking domain specific concepts, but also provide safety guarantees to
-% curtail undefined behavior, as much as possible, and produce well formed
-% applications. Also the language needs to allow the programmer to define
-% behavior across both components in a switch, the control and data planes. This
-% also helps define the requirements of the target machine for these networking
-% applications. The runtime needs to be fully programmable and execute these
-% programs on native hardware. By utilizing a virtual machine as the execution
-% environment, the runtime is able to be mapped to a variety of architectures
-% and take advantage of any and all hardware optimizations present.
-
 \section{Contributions}
+The contributions presented in this thesis are... 
+
+Design, implementation, experimentation.
+
 Freeflow is our software implementation of an intelligent network switch. This
 system provides a framework on which compiled network applications can be
 loaded and executed. The system has two major components needed by
@@ -207,46 +195,10 @@ threading architectures.
 Freeflow provides a runtime support library that Steve applications can 
 leverage to execute as efficiently as possible. The library houses a collection
 of system calls, exposed as external C functions, to allow applications to call
-into the system during execution.
-
-\section{Background}
-Throughout the development of this project there were a few implementation
-methods that did not end up panning out. Each approach has their own pros
-and cons, and are highlighted in the follow sections.
-
-\subsection{DPDK}
-Intel's DPDK provided users with a framework on which data plane applications
-could be built utilizing highly optimized constructs and device drivers. The
-examples laid out in the documentation is promising, and the desire to have
-low level access to underlying hardware in a system is more than satisfied
-in this impelementation. However, there were a few road blocks on the path to
-embracing this powerful data plane runtime environment. First and foremost, the
-device drivers provided were specifically written for Intel brand hardware. If
-there is no genuine Intel network inferface cards (NICs), a virtual machine
-would be necessary in order to emulate their functionality and be able to take
-advantage of the low level functionality, such as direct access to raw
-ethernet packet data. At the time we were investigating this approach, DPDK was
-more in it's infancy (release 1.0, 1.1), and though there was a decent amount
-of documentation, the usage of their system was not very intuitive. Lastly
-there was the issue of language support, DPDK can only build C applications
-using GCC as C++ support is only available with the usage of Intel's C++
-compiler. The combination of all these issues led us to stray away from
-targeting DPDK as our runtime environment.
-
-\subsection{RISC V}
-Our next approach focused more on the interaction between the language and
-runtime components of our system, with the hopes of being able to execute
-the language in a native ISA. We came across an extensible ISA, RISC V, that
-provided not only basic arithmetic, logical, and control flow instructions but
-also left room for a number of custom instructions. This seemed like a great
-way to incorporate specialized network programming instructions into a native
-format. Unfortionately, this would also require that we interpret and implement
-all of the supported instructions in the set in an virtual machine. As a result
-the execution took a serious hit in terms of performance at the cost of this
-flexibility. This project requires a fine balance of flexibility and
-performance, and the deviation between these properties was too great.
+into the system during execution. These system calls allow the runtime to map the execution of certain instructions to the most appropriate computational device present and provide access to guaranteed resources.
 
 \section{Road Map}
+% Write a short paragraph about each topic.
 This paper covers our initial work towards a fully programmable networking device. The topics covered are:
 \begin{itemize}
 \item Software Defined Networking - Chapter \ref{sdn}.
