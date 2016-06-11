@@ -36,7 +36,28 @@ capabilities varying greatly between vendors. This lack of transparency makes
 it difficult to model an abstract machine that can be targeted by networking
 applications.
 
-Research in the domain of Software Defined Networking (SDN) investigates the decoupling of the two planes, giving users the ability to create networking applications that can respond to changes in network traffic flows in real time. The emphasis in this model is to allow a single control plane to manage numerous data planes in one or many switches as a unified entity. Most of the work in this field revolves primarily around virtual network switches, building on concepts provided by the OpenFlow specification \ref{openflow}. We chose to focus on the implementation of a single programmable network device, where the control and data plane exist within the same system. This allowed us to produce a specification for an abstract machine for networking applications. The machine defines memory and object models, program execution semantics, a set of required operations, access to guaranteed resources, and the types of objects that it operates on and their behaviors. It must also be able to support a variety of high level programming languages as well as platforms and network processor architectures. Optimization support for specialized instruction execution and offloading compuation to hardware accelerators and/or co-processors is also a key requirement to keep performance on par. Languages are able to interact with the virtual machine through an application binary interface (ABI), that defines symbols and rules that dictate how they can utilize the runtime system. This approach has produced an instance of an abstract machine that provides the necessary resources and capabilities required to support network application execution.
+Research in the domain of Software Defined Networking (SDN) investigates the
+decoupling of the two planes, giving users the ability to create networking
+applications that can respond to changes in network traffic flows in real time.
+The emphasis in this model is to allow a single control plane to manage numerous
+data planes in one or many switches as a unified entity. Most of the work in
+this field revolves primarily around virtual network switches, building on
+concepts provided by the OpenFlow specification \ref{openflow}. We chose to
+focus on the implementation of a single programmable network device, where the
+control and data plane exist within the same system. This allowed us to produce
+a specification for an abstract machine for networking applications.
+The machine defines memory and object models, program execution semantics,
+a set of required operations, access to guaranteed resources, and the types
+of objects that it operates on and their behaviors. It must also be able to
+support a variety of high level programming languages as well as platforms
+and network processor architectures. Optimization support for specialized
+instruction execution and offloading compuation to hardware accelerators and/or
+co-processors is also a key requirement to keep performance on par. Languages
+are able to interact with the virtual machine through an application binary
+interface (ABI), that defines symbols and rules that dictate how they can
+utilize the runtime system. This approach has produced an instance of an
+abstract machine that provides the necessary resources and capabilities
+required to support network application execution.
 
 
 
