@@ -1,33 +1,46 @@
 \chapter{RELATED WORK}
 \label{related}
-% 1-2 pghs describing whats in this chapter.
+The related works section is comprised of the more current projects being
+developed in this problem domain, SDN.
 
 \section{Software Defined Networking}
 \label{related:sdn}
-SDN provides a networking device model where the control and data planes are decoupled from one another, where a single control plane is responsible for distributing application execution across a set of network switches viewed as a unified data plane instance. Applications generally operate at the control plane level and rely on distributed platforms, such as OpenVSwitch (OVS) \ref{ovs}, to push the logic down to the hardware level. Generally a hypervisor sits on top of each switch and helps orchestrate the entire system.d
+SDN provides a networking device model where the control and data planes are
+decoupled from one another, where a single control plane is responsible for
+distributing application execution across a set of network switches viewed as
+a unified data plane instance. Applications generally operate at the control
+plane level and rely on distributed platforms, such as OpenVSwitch (OVS)
+\ref{ovs}, to push the logic down to the hardware level. Generally a hypervisor
+sits on top of each switch and helps orchestrate the entire system.
 
 
 \section{Networking Applications}
 \label{related:apps}
-Not all networking applications operate in the same conceptual space, that is, they generally act as a part of a larger system. Applications can operate on a particular traffic flow, a node within a network, or across the entire network.
+Not all networking applications operate in the same conceptual space, that is,
+they generally act as a part of a larger system. Applications can operate on a
+particular traffic flow, a node within a network, or across the entire network.
 % Add more to this.
 
 \section{OpenFlow}
 \label{related:of}
 % Add more to this.
-The OpenFlow model defines a messaging layer that the control and, potentially distributed, data plane(s) can communicate through. This is embodied in the OpenFlow Protocol, which specifies a set of ``instructions'' that the control and data planes must support. 
+The OpenFlow \cite{openflow} model defines a messaging layer that the control and, potentially
+distributed, data plane(s) can communicate through. This is embodied in the
+OpenFlow Protocol, which specifies a set of ``instructions'' that the control
+and data planes must support.
 
 \section{DPDK}
 \label{related:dpdk}
-Describe DPDK.
+Intel's Data Plane Development Kit (DPDK) \cite{dpdk} provides a framework that
+allows programmers to create highly optimized data plane applications.
 
 \section{Open Data Plane}
 \label{related:odp}
 Talk about this a little bit.
 
-\section{OpenVSwitch}
+\section{Open Virtual Switch}
 \label{related:ovs}
-Emphasize how open vswitch works to distibute sdn apps.
+Open Virtual Switch (OVS)
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.5]{ovs_arch}
@@ -57,11 +70,12 @@ performance, and the deviation between these properties was too great.
 \label{related:hcp}
 Discuss the heterogenous compute models considered.
 
-\subsection{HSAIL}
-\label{related:hcp:hsail}
-Heterogenous System Architecture Intermediate Langauge.
+\subsection{Heterogenous System Architecture}
+\label{related:hcp:hsa}
+Or HSAIL \cite{hsail} provides a specification for creating a heterogeneous
+system architecture that
 
-\subsection{OpenCL}
+\subsection{Open Compute Language}
 \label{related:hcp:ocl}
 Open Compute Language.
 
