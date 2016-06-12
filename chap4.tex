@@ -1,11 +1,12 @@
 \chapter{FREEFLOW}
 \label{ff}
 In this chapter we discuss the Freeflow programmable virtual switch
-implementation details. The first few sections describe the higher level components
-in this architecture, the control and data planes, applications, as well as the
-virtual machine. Then we dive into the details of the object models (e.g.
-ports, tables, and the packet context), native instruction execution semantics,
-as well as the memory and threading models currently supported.
+implementation details. The first few sections describe the higher level 
+components in this architecture, the control and data planes, applications, as 
+well as the virtual machine. Then we dive into the details of the object 
+models (e.g. ports, tables, and the packet context), native instruction 
+execution semantics, as well as the memory and threading models currently 
+supported.
 
 \begin{figure}[h]
 \centering
@@ -19,9 +20,9 @@ as well as the memory and threading models currently supported.
 The control plane acts as the brain in a network switch, and is responsible for
 the hosting of applications as well as the management of the underlying data
 plane. In the control plane, the system configuration establishes the resources
-that must be provided to support application execution. During execution, events
-raised from the data plane are caught and processed by application defined event
-handlers.
+that must be provided to support application execution. During execution, 
+events raised from the data plane are caught and processed by application 
+defined event handlers.
 
 \section{Data Plane}
 \label{ff:dp}
@@ -38,9 +39,49 @@ that is incurred in the former model. By allowing the application to straddle
 the line between the control and data planes, the logic it provides is able
 to be pushed into hardware and executed in a native fashion.
 
+Networking applications operate on packets, utilizing information found inside of nested protocol headers to determine the appropriate action to take. 
+
 \section{Packet Context}
-\label{vm:context}
-Lots to talk about here.
+\label{vm:packet-context}
+Network packets are arranged as nested protocol headers, which contain fields that describe the structure and contents of a particular layer. Since the Freeflow data plane has no knowledge of any protocol structures (i.e. it is protocol independent), it operates on contextual information extracted by applications and stored in a \emph{context} object. The metadata contained in a context allows the data plane to provide robust network functionality and execute a variety of network applications.
+
+\subsection{Packets}
+In networking, packets represent raw data that has been transmitted over some media with protocol headers for each layer contained in the packet. Each layer gives information about the current
+
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.33]{ipv4_eth_frame}
+\caption{An IPv4 Ethernet frame.}
+\label{fig:ipv4_eth_frame}
+\end{figure}
+
+\subsection{Context}
+Stuff about context structure, etc.
+
+\begin{lstlisting}[language=c++]
+struct Decode_info {
+	uint16_t 		pos;	   // Packet decoding offset
+	Environment headers; // Saved packet header locations
+	Environment fields;	 // Saved packet fields locations
+};
+
+struct Context {
+	Ingress_info input;
+	Control_info ctrl;
+	Decode_info	 decode;
+	Packet 			 packet;   // A handle to packet memory
+	Metadata 		 metadata; // Application-defined metadata
+	Action_list	 actions;  // A sequence of instructions
+};
+\end{lstlisting}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{context_concrete}
+\caption{An example binding environment for an IPv4 Ethernet frame.}
+\label{fig:context_binding}
+\end{figure}
 
 \section{Virtual Machine}
 \label{vm}
@@ -74,30 +115,27 @@ Logical ports represent software networking constructs that utilize file
 descriptors to act as a endpoint for communication. An illustration of the port
 object UML can be found in figure \ref{port_uml}. Virtual ports are derived
 from logical ports, and provide specialized functionality for the system. To
-further classify the port type, they can be either seen as an \emph{input} port,
-where data from an external source can be injected into the system, or an
+further classify the port type, they can be either seen as an \emph{input} 
+port, where data from an external source can be injected into the system, or an
 \emph{output} port, which sends data to other external or internal devices.
 
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.5]{ff_port_uml}
+\includegraphics[scale=0.65]{ff_port_uml}
 \caption{Freeflow port uml diagaram.}
 \label{port_uml}
 \end{figure}
 
 \section{Tables}
 \label{vm:tables}
-In network switches, tables are used to match properties from network flows with
-user-defined forwarding behaviors. They can be defined using a variety of
+In network switches, tables are used to match properties from network flows 
+with user-defined forwarding behaviors. They can be defined using a variety of
 data structures and algorithms to implement them, but generally are categorized
 as \emph{exact}, \emph{prefix}, or \emph{wildcard}. Each entry in a flow table
 contains a \emph{key}, that is compared to a certain field within packet
 
-The semantics for each of
-these matching types are as follows:
-
-Entries in a table contain a \emph{key}, which
-is used to aggregate traffic containing similar characteristics into flows.
+Entries in a table contain a \emph{key}, which is used to aggregate traffic 
+containing similar characteristics into flows.
 
 
 \section{Instructions}
