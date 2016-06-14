@@ -1,6 +1,47 @@
 \chapter{ABI Listing}
 \label{abi-listing}
 
+\paragraph{Action Execution}
+
+
+
+\paragraph{Context}
+
+\begin{lstlisting}[language=c++]
+uint32_t ff_context_get_input_port(Context* cxt)
+\end{lstlisting}
+Returns the port ID that the context \emph{cxt} was created on.
+
+
+\begin{lstlisting}[language=c++]
+void ff_context_set_output_port(Context* cxt, uint32_t pid)
+\end{lstlisting}
+Sets the output port in the context \emph{cxt} to the given port id \emph{pid}.
+
+\paragraph{Data Plane}
+
+\begin{lstlisting}[language=c++]
+Port* ff_get_drop_port(Dataplane* dp)
+\end{lstlisting}
+Returns a pointer to the \emph{drop port} in the dataplane \emph{dp}.
+
+
+\begin{lstlisting}[language=c++]
+Port* ff_get_flood_port(Dataplane* dp)
+\end{lstlisting}
+Returns a pointer to the \emph{flood port} in the dataplane \emph{dp}.
+
+\begin{lstlisting}[language=c++]
+Port* ff_get_flood_port(Dataplane* dp)
+\end{lstlisting}
+Returns a pointer to the \emph{flood port} in the dataplane \emph{dp}.
+
+\paragraph{Decode}
+
+\paragraph{Table}
+
+
+
 \begin{lstlisting}[language=c++]
 ff_create_table(...)
 \end{lstlisting}
