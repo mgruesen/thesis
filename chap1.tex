@@ -186,16 +186,10 @@ targetable on a variety of architectures and utilize the physical and logical
 resources available.
 
 \section{Contributions}
-The contributions presented in this thesis are...
-
-Design, implementation, experimentation.
-
-Freeflow is our software implementation of an intelligent network switch. This
-system provides a framework on which compiled network applications can be
-loaded and executed. The system has two major components needed by
-applications, a runtime environment to target which we call the Freeflow
-Virtual Machine (FFVM), and a system interface which applications can be
-programmed against.
+The contributions presented in this thesis are the design and implementation of
+the Freeflow Virtual Machine, with an emphasis on the Port abstraction and the
+threading and memory models, as well as the experimentation aspects of the
+project.
 
 \subsection{Virtual Machine}
 FFVM is a process that provides the resources necessary for network
@@ -216,8 +210,33 @@ threading architectures.
 Freeflow provides a runtime support library that Steve applications can
 leverage to execute as efficiently as possible. The library houses a collection
 of system calls, exposed as external C functions, to allow applications to call
-into the system during execution. These system calls allow the runtime to map the execution of certain instructions to the most appropriate computational device present and provide access to guaranteed resources.
+into the system during execution. These system calls allow the runtime to map
+the execution of certain instructions to the most appropriate computational
+device present and provide access to guaranteed resources.
 
 \section{Road Map}
 % Write a short paragraph about each topic.
-This paper covers our initial work towards a fully programmable networking device. The topics covered are:
+This paper covers our initial work towards a fully programmable networking
+device. The main topics in this thesis are described in the following paragraphs.
+
+Background and related works are contained in the Chapter \ref{related},
+detailing some of the more mature research efforts in the domain of SDN. An
+explanation of the SDN paradigm...
+
+In Chapter \ref{invest}, the early investigations are discussed. This section
+journals the different approaches that were considered in the design and
+implementation of this project, explaining the benefits as well as the defecits
+and the reasoning behind the decision to digress from them.
+
+Chapter \ref{ff} covers the design and implementation of the Freeflow system,
+including applications, the virtual machine, and the runtime support library.
+This chapter discusses the details of the contributions made towards this work
+at length.
+
+The following section, Chapter \ref{hosting}, discusses how applications are
+able to be hosted by the virtual machine and explains the interface between the
+two. In this chapter the application binary interface (ABI) gives a specification
+for how applications are able to interact and utilize the runtime system.
+
+Chapter \ref{exper} presents the experiments conducted as well as some initial
+evaluation metrics collected.

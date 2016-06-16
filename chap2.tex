@@ -24,15 +24,22 @@ particular traffic flow, a node within a network, or across the entire network.
 \section{OpenFlow}
 \label{related:of}
 % Add more to this.
-The OpenFlow \cite{openflow} model defines a messaging layer that the control and, potentially
-distributed, data plane(s) can communicate through. This is embodied in the
-OpenFlow Protocol, which specifies a set of ``instructions'' that the control
-and data planes must support.
+The OpenFlow \cite{openflow} model defines a messaging layer that the control
+and, potentially distributed, data plane(s) can communicate through. This is
+embodied in the OpenFlow Protocol, which specifies a set of ``instructions''
+that the control and data planes must support.
 
 \section{DPDK}
 \label{related:dpdk}
 Intel's Data Plane Development Kit (DPDK) \cite{dpdk} provides a framework that
-allows programmers to create highly optimized data plane applications.
+allows programmers to create highly optimized data plane applications. This
+platform utilizes custom drivers that provide raw access to networking devices
+and computational resources. The system is tuned to natively support Intel
+brand hardware and allows users to create C applications that interface with
+the runtime environent. Support for higher level applications, such as C++,
+require the usage of Intel's Compiler Collection (ICC), as non-portable compiler
+directives are used throughout the framework and are not supported by the GNU
+Compiler Collection (GCC).
 
 \section{Open Data Plane}
 \label{related:odp}
@@ -50,30 +57,41 @@ Open Virtual Switch (OVS)
 
 \section{NetASM}
 \label{related:netasm}
-Talk, at length, about netasm. Can bring up riscv here too.
+The customized networking assembly language, NetASM \cite{netasm}, defines an
+instruction set architecture (ISA) that tuned directly towards networking
+programming. Instructions for modifying packet headers and state as well
+as table and specialized operations are natively supported. In addition to the
+networking oriented instructions the set also contains basic logical,
+arithmetic, and control-flow operations. Applications written in NetASM can model
+the execution environment as either a traditional Turing complete register
+machine or an extended abstract machine developed by the authors.
 
 \subsection{RISC V}
 % Rewrite this.
-Our next approach focused more on the interaction between the language and
-runtime components of our system, with the hopes of being able to execute
-the language in a native ISA. We came across an extensible ISA, RISC V, that
-provided not only basic arithmetic, logical, and control flow instructions but
-also left room for a number of custom instructions. This seemed like a great
-way to incorporate specialized network programming instructions into a native
-format. Unfortionately, this would also require that we interpret and implement
-all of the supported instructions in the set in an virtual machine. As a result
-the execution took a serious hit in terms of performance at the cost of this
-flexibility. This project requires a fine balance of flexibility and
-performance, and the deviation between these properties was too great.
+RISC-V provides an extensible ISA, which encompasses the regular arithmetic,
+logical and control-flow operations with room for a number of user-specified
+instructions.
 
 \section{Heterogenous Compute Platforms}
 \label{related:hcp}
-Discuss the heterogenous compute models considered.
+Much of the research in the domain of SDN in regards to runtime environments
+encompass many of the problems found in heterogeneous computing platforms.
+These issues tend to revolve around the utilization of optimized hardware
+computational devices. This relates to the needs of networking programming
+where a data plane is expected to be able to offload certain computation to
+hardware components, such as encryption, checksums, and even packet header
+processors. Below is a listing of the relevant projects in this domain that
+were studied during the design and implementation of the Freeflow system.
 
 \subsection{Heterogenous System Architecture}
 \label{related:hcp:hsa}
 Or HSA \cite{hsa} provides a specification for creating a heterogeneous
-system architecture that
+system architecture that supports the execution of applications across a variety
+of computational resources. Interfacing with these different computing devices
+requires knowledge of each devices memory model and execution semantics, and
+in order to program against them the system must provide a uniform view that
+each device conforms to.
+
 
 \subsection{Open Compute Language}
 \label{related:hcp:ocl}
