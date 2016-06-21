@@ -1,6 +1,6 @@
-\chapter{EARLY INVESTIGATIONS}
-\label{invest}
-What didn't work and why.
+\chapter{HARDWARE VIRTUALIZATION}
+\label{hardware}
+
 
 \section{DPDK}
 \label{invest:dpdk}
@@ -21,11 +21,3 @@ there was the issue of language support, DPDK can only build C applications
 using GCC as C++ support is only available with the usage of Intel's C++
 compiler. The combination of all these issues led us to stray away from
 targeting DPDK as our runtime environment.
-
-\section{Instruction Set Architectures}
-\label{invest:isa}
-Started making our own, gave up when we got to branches, jumps, logical/arith shifts, etc.
-
-\section{Native Execution}
-\label{invest:native}
-To execute native code what resources do you need to provide?

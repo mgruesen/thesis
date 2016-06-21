@@ -1,6 +1,9 @@
 \chapter{INTRODUCTION}
 \label{intro}
 
+
+\section{Background}
+\label{intro:bg}
 Networking architecture has become the focus of many facets in computing with
 an increased reliance on network data. As more and more devices become
 connected and users produce and consume data at an ever-increasing rate, the
@@ -42,7 +45,7 @@ applications that can respond to changes in network traffic flows in real time.
 The emphasis in this model is to allow a single control plane to manage numerous
 data planes in one or many switches as a unified entity. Most of the work in
 this field revolves primarily around virtual network switches, building on
-concepts provided by the OpenFlow specification \ref{openflow}. We chose to
+concepts provided by the OpenFlow specification \cite{openflow}. We chose to
 focus on the implementation of a single programmable network device, where the
 control and data plane exist within the same system. This allowed us to produce
 a specification for an abstract machine for networking applications.
@@ -60,10 +63,8 @@ abstract machine that provides the necessary resources and capabilities
 required to support network application execution.
 
 
-\section{Background}
-Be broader about the topics brought up in the problem statement.
-
 \section{Goals}
+\label{intro:goals}
 It is clear that there is need for runtime support for compiled
 networking applications. The virtual machine needed to provide functionality
 for both parts of a network switch, the control and data planes, and allow
@@ -73,34 +74,38 @@ targetable on a variety of architectures and utilize the physical and logical
 resources available.
 
 \section{Contributions}
-The contributions presented in this thesis are the design and implementation of
-the Freeflow Virtual Machine, with an emphasis on the port abstraction and the
-threading and memory models, as well as the experimentation.
+\label{intro:contrib}
+The contributions presented in this thesis come from numerous experiments with
+low level networking hardware. These experiments helped characterize the problem
+domain with respect to 
 
-\subsection{Virtual Machine}
-FFVM is a process that provides the resources necessary for network
-applications to execute. These resources are:
-
-\begin{itemize}
-\item \emph{Ports} - The source of I/O for applications.
-\item \emph{Tables} - Matching data structures that define forwarding behavior.
-\item \emph{Packet Context} - Contextual information about a packet.
-\item \emph{Action Exection} - Native FFVM instructions to be executed by the
-runtime.
-\item \emph{Memory} - Packet Context buffers.
-\item \emph{Threading} - Infrastructure for modeling applications in various
-threading architectures.
-\end{itemize}
-
-\subsection{Runtime Support Library}
-Freeflow provides a runtime support library that Steve applications can
-leverage to execute as efficiently as possible. The library houses a collection
-of system calls, exposed as external C functions, to allow applications to call
-into the system during execution. These system calls allow the runtime to map
-the execution of certain instructions to the most appropriate computational
-device present and provide access to guaranteed resources.
+% \subsection{Virtual Machine}
+% \label{intro:vm}
+% FFVM is a process that provides the resources necessary for network
+% applications to execute. These resources are:
+%
+% \begin{itemize}
+% \item \emph{Ports} - The source of I/O for applications.
+% \item \emph{Tables} - Matching data structures that define forwarding behavior.
+% \item \emph{Packet Context} - Contextual information about a packet.
+% \item \emph{Action Exection} - Native FFVM instructions to be executed by the
+% runtime.
+% \item \emph{Memory} - Packet Context buffers.
+% \item \emph{Threading} - Infrastructure for modeling applications in various
+% threading architectures.
+% \end{itemize}
+%
+% \subsection{Runtime Support Library}
+% \label{intro:rsl}
+% Freeflow provides a runtime support library that Steve applications can
+% leverage to execute as efficiently as possible. The library houses a collection
+% of system calls, exposed as external C functions, to allow applications to call
+% into the system during execution. These system calls allow the runtime to map
+% the execution of certain instructions to the most appropriate computational
+% device present and provide access to guaranteed resources.
 
 \section{Road Map}
+\label{intro:map}
 % Write a short paragraph about each topic.
 This paper covers our initial work towards a fully programmable networking
 device. The main topics in this thesis are described in the following paragraphs.
