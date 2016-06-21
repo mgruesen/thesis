@@ -3,21 +3,24 @@
 
 
 \section{DPDK}
-\label{invest:dpdk}
+\label{hardware:dpdk}
 Intel's DPDK provided users with a framework on which data plane applications
 could be built utilizing highly optimized constructs and device drivers. The
 examples laid out in the documentation is promising, and the desire to have
 low level access to underlying hardware in a system is more than satisfied
-in this impelementation. However, there were a few road blocks on the path to
+in this implementation. However, there were a few road blocks on the path to
 embracing this powerful data plane runtime environment. First and foremost, the
 device drivers provided were specifically written for Intel brand hardware. If
-there is no genuine Intel network inferface cards (NICs), a virtual machine
+there is no genuine Intel network interface cards (NICs), a virtual machine
 would be necessary in order to emulate their functionality and be able to take
 advantage of the low level functionality, such as direct access to raw
-ethernet packet data. At the time we were investigating this approach, DPDK was
+Ethernet packet data. At the time we were investigating this approach, DPDK was
 more in it's infancy (release 1.0, 1.1), and though there was a decent amount
 of documentation, the usage of their system was not very intuitive. Lastly
 there was the issue of language support, DPDK can only build C applications
 using GCC as C++ support is only available with the usage of Intel's C++
 compiler. The combination of all these issues led us to stray away from
 targeting DPDK as our runtime environment.
+
+\section{Freeflow Ports}
+\label{hardware:ffports}

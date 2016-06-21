@@ -1,13 +1,19 @@
 \chapter{INTRODUCTION}
 \label{intro}
 
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{overview}
+\caption{}
+\label{overview}
+\end{figure}
 
 \section{Background}
 \label{intro:bg}
 Networking architecture has become the focus of many facets in computing with
 an increased reliance on network data. As more and more devices become
 connected and users produce and consume data at an ever-increasing rate, the
-way we accomodate these needs in networking infrastructure has prompted the
+way we accommodate these needs in networking infrastructure has prompted the
 need for change. In order to service the needs of users, network engineers
 require more functionality from their equipment than basic switching and
 routing. Their networks need to be more intelligent, and allow for more
@@ -42,25 +48,25 @@ applications.
 Research in the domain of Software Defined Networking (SDN) investigates the
 decoupling of the two planes, giving users the ability to create networking
 applications that can respond to changes in network traffic flows in real time.
-The emphasis in this model is to allow a single control plane to manage numerous
-data planes in one or many switches as a unified entity. Most of the work in
-this field revolves primarily around virtual network switches, building on
-concepts provided by the OpenFlow specification \cite{openflow}. We chose to
-focus on the implementation of a single programmable network device, where the
-control and data plane exist within the same system. This allowed us to produce
-a specification for an abstract machine for networking applications.
-The machine defines memory and object models, program execution semantics,
-a set of required operations, access to guaranteed resources, and the types
-of objects that it operates on and their behaviors. It must also be able to
-support a variety of high level programming languages as well as platforms
-and network processor architectures. Optimization support for specialized
-instruction execution and offloading compuation to hardware accelerators and/or
-co-processors is also a key requirement to keep performance on par. Languages
-are able to interact with the virtual machine through an application binary
-interface (ABI), that defines symbols and rules that dictate how they can
-utilize the runtime system. This approach has produced an instance of an
-abstract machine that provides the necessary resources and capabilities
-required to support network application execution.
+The emphasis in this model is to allow a single control plane to manage 
+numerous data planes in one or many switches as a unified entity. Most of the 
+work in this field revolves primarily around virtual network switches, 
+building on concepts provided by the OpenFlow specification \cite{openflow}. 
+We chose to focus on the implementation of a single programmable network 
+device, where the control and data plane exist within the same system. This 
+allowed us to produce a specification for an abstract machine for networking 
+applications. The machine defines memory and object models, program execution 
+semantics, a set of required operations, access to guaranteed resources, and 
+the types of objects that it operates on and their behaviors. It must also be 
+able to support a variety of high level programming languages as well as 
+platforms and network processor architectures. Optimization support for 
+specialized instruction execution and offloading computation to hardware 
+accelerators and/or co-processors is also a key requirement to keep 
+performance on par. Languages are able to interact with the virtual machine 
+through an application binary interface (ABI), that defines symbols and rules 
+that dictate how they can utilize the runtime system. This approach has 
+produced an instance of an abstract machine that provides the necessary 
+resources and capabilities required to support network application execution.
 
 
 \section{Goals}
@@ -69,15 +75,15 @@ It is clear that there is need for runtime support for compiled
 networking applications. The virtual machine needed to provide functionality
 for both parts of a network switch, the control and data planes, and allow
 applications to have control and access to these resources at the user level.
-In addition to servicing the needs of applications, the runtime needed to be
-targetable on a variety of architectures and utilize the physical and logical
-resources available.
+In addition to servicing the needs of applications, the runtime needs to be
+supported on a variety of architectures and utilize the materialized and 
+virtualized resources available.
 
 \section{Contributions}
 \label{intro:contrib}
 The contributions presented in this thesis come from numerous experiments with
-low level networking hardware. These experiments helped characterize the problem
-domain with respect to 
+low level networking hardware. These experiments helped characterize the 
+problem domain with respect to 
 
 % \subsection{Virtual Machine}
 % \label{intro:vm}
@@ -110,24 +116,23 @@ domain with respect to
 This paper covers our initial work towards a fully programmable networking
 device. The main topics in this thesis are described in the following paragraphs.
 
-Background and related works are contained in the Chapter \ref{related},
-detailing some of the more mature research efforts in the domain of SDN. An
-explanation of the SDN paradigm...
+Related works are contained in the Chapter \ref{related}, detailing some of the more mature research efforts in the domain of SDN. An explanation of the SDN paradigm, the OpenFlow protocol, network applications, as well as various
+platforms and frameworks considered can be found here.
 
-In Chapter \ref{invest}, the early investigations are discussed. This section
-journals the different approaches that were considered in the design and
-implementation of this project, explaining the benefits as well as the defecits
-and the reasoning behind the decision to digress from them.
+In Chapters \ref{machine} and \ref{insn}, the early investigations into
+hardware virtualization and instruction materialization are discussed, 
+respectively. This section journals the different approaches that were 
+considered in the design and implementation throughout this project, and 
+explains the benefits, deficits, and lessons learned from each approach.
 
 Chapter \ref{ff} covers the design and implementation of the Freeflow system,
-including applications, the virtual machine, and the runtime support library.
-This chapter discusses the details of the contributions made towards this work
-at length.
-
-The following section, Chapter \ref{hosting}, discusses how applications are
-able to be hosted by the virtual machine and explains the interface between the
-two. In this chapter the application binary interface (ABI) gives a specification
-for how applications are able to interact and utilize the runtime system.
+including application hosting, the virtual machine, the runtime support 
+library and the application binary interface exposed. This chapter discusses 
+the details of the contributions made towards this work at length.
 
 Chapter \ref{expr} presents the experiments conducted as well as some initial
 evaluation metrics collected.
+
+In the final chapter, Chapter \ref{concl}, the conclusions drawn from the
+research conducted are laid out. Future work for this project is also discussed
+in this chapter.
