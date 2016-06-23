@@ -1,12 +1,40 @@
 \chapter{INTRODUCTION}
 \label{intro}
 
+This thesis presents a series of experiments searching to define an ideal
+execution environment for Software Defined Networking (SDN) applications. By
+exploring the different implementation methods utilized in the domain of SDN,
+namely pure software and hardware, the benefits and deficits of each be
+evaluated and contribute towards a concrete specification. In a pure software
+implementation, most all of the underlying hardware components have been
+virtualized, providing more flexibility and compatibility at the cost of
+performance. A pure hardware implementation will materialize a high level
+language into optimized native instructions to keep performance high, but
+narrows the set of languages supported. In Figure \ref{overview}, the spectrum
+for these two methods is shown.
+
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.5]{overview}
-\caption{}
+\caption{Execution environments for SDN applications can utilize a high level
+and low level implementation methods. The sweet spot lies somewhere between
+the two.}
 \label{overview}
 \end{figure}
+
+To translate high level code to a target device's native instruction set, more
+work has to be done by the compiler to support both the language and the
+device. Knowledge of the targets architecture, including specialized hardware
+accelerators, must be well defined in order optimize execution. However this
+approach is not always ideal, especially in the domain of SDN where network
+switch architecture varies greatly between vendors in terms of capabilities
+and features. This contributes to a lack of generalization in modern networking
+where end-users are typically only able to specify configuration settings. In
+order to bridge the gap, hardware components can be virtualized to provide
+low level access to resources available in the system. A suitable execution
+environment would lie somewhere between these two, taking advantage of powerful
+compilers that can lower high level code while also leveraging low level
+resource interfaces raised from the hardware.
 
 \section{Background}
 \label{intro:bg}
@@ -48,24 +76,24 @@ applications.
 Research in the domain of Software Defined Networking (SDN) investigates the
 decoupling of the two planes, giving users the ability to create networking
 applications that can respond to changes in network traffic flows in real time.
-The emphasis in this model is to allow a single control plane to manage 
-numerous data planes in one or many switches as a unified entity. Most of the 
-work in this field revolves primarily around virtual network switches, 
-building on concepts provided by the OpenFlow specification \cite{openflow}. 
-We chose to focus on the implementation of a single programmable network 
-device, where the control and data plane exist within the same system. This 
-allowed us to produce a specification for an abstract machine for networking 
-applications. The machine defines memory and object models, program execution 
-semantics, a set of required operations, access to guaranteed resources, and 
-the types of objects that it operates on and their behaviors. It must also be 
-able to support a variety of high level programming languages as well as 
-platforms and network processor architectures. Optimization support for 
-specialized instruction execution and offloading computation to hardware 
-accelerators and/or co-processors is also a key requirement to keep 
-performance on par. Languages are able to interact with the virtual machine 
-through an application binary interface (ABI), that defines symbols and rules 
-that dictate how they can utilize the runtime system. This approach has 
-produced an instance of an abstract machine that provides the necessary 
+The emphasis in this model is to allow a single control plane to manage
+numerous data planes in one or many switches as a unified entity. Most of the
+work in this field revolves primarily around virtual network switches,
+building on concepts provided by the OpenFlow specification \cite{openflow}.
+We chose to focus on the implementation of a single programmable network
+device, where the control and data plane exist within the same system. This
+allowed us to produce a specification for an abstract machine for networking
+applications. The machine defines memory and object models, program execution
+semantics, a set of required operations, access to guaranteed resources, and
+the types of objects that it operates on and their behaviors. It must also be
+able to support a variety of high level programming languages as well as
+platforms and network processor architectures. Optimization support for
+specialized instruction execution and offloading computation to hardware
+accelerators and/or co-processors is also a key requirement to keep
+performance on par. Languages are able to interact with the virtual machine
+through an application binary interface (ABI), that defines symbols and rules
+that dictate how they can utilize the runtime system. This approach has
+produced an instance of an abstract machine that provides the necessary
 resources and capabilities required to support network application execution.
 
 
@@ -76,14 +104,15 @@ networking applications. The virtual machine needed to provide functionality
 for both parts of a network switch, the control and data planes, and allow
 applications to have control and access to these resources at the user level.
 In addition to servicing the needs of applications, the runtime needs to be
-supported on a variety of architectures and utilize the materialized and 
+supported on a variety of architectures and utilize the materialized and
 virtualized resources available.
 
 \section{Contributions}
 \label{intro:contrib}
 The contributions presented in this thesis come from numerous experiments with
-low level networking hardware. These experiments helped characterize the 
-problem domain with respect to 
+low level networking hardware. These experiments helped characterize the
+problem domain with respect to low level virtualization of port hardware and
+high level language translation to a native instruction set architecture (ISA).
 
 % \subsection{Virtual Machine}
 % \label{intro:vm}
@@ -114,25 +143,34 @@ problem domain with respect to
 \label{intro:map}
 % Write a short paragraph about each topic.
 This paper covers our initial work towards a fully programmable networking
-device. The main topics in this thesis are described in the following paragraphs.
+device. The main topics in this thesis are described in the following
+paragraphs.
 
-Related works are contained in the Chapter \ref{related}, detailing some of the more mature research efforts in the domain of SDN. An explanation of the SDN paradigm, the OpenFlow protocol, network applications, as well as various
+Related works are contained in the Chapter \ref{related}, detailing some of the
+more mature research efforts in the domain of SDN. An explanation of the SDN
+paradigm, the OpenFlow protocol, network applications, as well as various
 platforms and frameworks considered can be found here.
 
-In Chapters \ref{machine} and \ref{insn}, the early investigations into
-hardware virtualization and instruction materialization are discussed, 
-respectively. This section journals the different approaches that were 
-considered in the design and implementation throughout this project, and 
+In Chapters \ref{hardware} and \ref{insn}, the early investigations into
+hardware virtualization and instruction materialization are discussed,
+respectively. This section journals the different approaches that were
+considered in the design and implementation throughout this project, and
 explains the benefits, deficits, and lessons learned from each approach.
 
 Chapter \ref{ff} covers the design and implementation of the Freeflow system,
-including application hosting, the virtual machine, the runtime support 
-library and the application binary interface exposed. This chapter discusses 
+including application hosting, the virtual machine, the runtime support
+library and the application binary interface exposed. This chapter discusses
 the details of the contributions made towards this work at length.
 
 Chapter \ref{expr} presents the experiments conducted as well as some initial
-evaluation metrics collected.
+evaluation metrics collected. These demonstrate basic networking device
+functionality for emulating Ethernet port end-points and cross-connects over
+TCP sockets, and provide a baseline which can be used to further optimize the
+system.
 
 In the final chapter, Chapter \ref{concl}, the conclusions drawn from the
 research conducted are laid out. Future work for this project is also discussed
 in this chapter.
+
+Lastly, Appendix \ref{abi-listing} contains a listing of the ABI provided by
+the Freeflow virtual machine as a reference.

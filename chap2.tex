@@ -49,17 +49,17 @@ were studied during the design and implementation of the Freeflow system.
 \subsection{Heterogeneous System Architecture}
 \label{related:hcp:hsa}
 Or HSA \cite{hsa}, provides a specification for creating a heterogeneous
-system architecture that supports the execution of applications across a 
-variety of computational resources. Interfacing with these different computing 
-devices requires knowledge of each devices memory model and execution 
-semantics, and in order to program against them the system must provide a 
+system architecture that supports the execution of applications across a
+variety of computational resources. Interfacing with these different computing
+devices requires knowledge of each devices memory model and execution
+semantics, and in order to program against them the system must provide a
 uniform view that each device conforms to.
 
 \subsection{CUDA}
 \label{related:hcp:cuda}
-NVIDIA's Compute Unified Device Architecture (CUDA) \cite{cuda} for General 
-Purpose Graphics Computing Units (GPGPUs) allows programmers to utilize a 
-graphics card to execute applications on a SIMD device. Each graphics card 
+NVIDIA's Compute Unified Device Architecture (CUDA) \cite{cuda} for General
+Purpose Graphics Computing Units (GPGPUs) allows programmers to utilize a
+graphics card to execute applications on a SIMD device. Each graphics card
 hosts a different set of features and capabilities, such as the number of cores
 available, memory architecture, and instruction sets. The CUDA library
 enables developers to write a single instance of a program and deploy
@@ -74,10 +74,10 @@ enabled GPU device.
 
 \subsection{Open Compute Language}
 \label{related:hcp:ocl}
-Khronos Group's Open Compute Language (OpenCL) \cite{opencl} offers an open, 
+Khronos Group's Open Compute Language (OpenCL) \cite{opencl} offers an open,
 cross-platform standard for programming parallel devices. Supported devices are
 personal computers, servers, and systems-on-a-chip (SOCs). The Standard
-Portable IR (SPIR), based on LLVM IR, was evolved into a similarly open and 
+Portable IR (SPIR), based on LLVM IR, was evolved into a similarly open and
 cross-platform language called SPIR-V. This IR utilizes LLVM as the target
 device, and allows for device specific code to be generated from a single
 application source. OpenCL focuses on the more general problem discussed in
@@ -90,7 +90,7 @@ Discuss the frameworks considered.
 \subsection{Seastar}
 \label{related:frameworks:seastar}
 The Seastar project \cite{seastar}, is an open source C++ framework that
-takes advantage of modern architectural designs present in many high 
+takes advantage of modern architectural designs present in many high
 performance servers.
 
 \subsection{Libevent}
@@ -106,7 +106,7 @@ platform utilizes custom drivers that provide raw access to networking devices
 and computational resources. The system is tuned to natively support Intel
 brand hardware and allows users to create C applications that interface with
 the runtime environment. Support for higher level applications, such as C++,
-require the usage of Intel's Compiler Collection (ICC), as non-portable 
+require the usage of Intel's Compiler Collection (ICC), as non-portable
 compiler directives are used throughout the framework and are not directly
 supported by the GNU Compiler Collection (GCC).
 
@@ -120,11 +120,11 @@ knowledge of the capabilities and features present in an execution environment.
 
 \section{Open Virtual Switch}
 \label{related:frameworks:ovs}
-Open Virtual Switch (OVS) \cite{ovs} enables the distribution of data 
+Open Virtual Switch (OVS) \cite{ovs} enables the distribution of data
 plane applications over an agregation of switching devices. OVS replaces
 the bridge between hypervisors running ontop of a distributed machine that
 is typically provided by OS kernels. The OVS controller is capable of managing
-pure software and/or hardware switchs, and supports the usage of specialized 
+pure software and/or hardware switchs, and supports the usage of specialized
 hardware accelerators. In Figure \ref{related:ovs_arch}, an illustration of
 the OVS distributed architecture is presented.
 
@@ -142,12 +142,12 @@ instruction set architecture (ISA) that tuned directly towards networking
 programming. Instructions for modifying packet headers and state as well
 as table and specialized operations are natively supported. In addition to the
 networking oriented instructions the set also contains basic logical,
-arithmetic, and control-flow operations. Applications written in NetASM can 
-model the execution environment as either a traditional Turing complete 
+arithmetic, and control-flow operations. Applications written in NetASM can
+model the execution environment as either a traditional Turing complete
 register machine or an extended abstract machine developed by the authors.
 
 \subsection{RISC V}
 % Rewrite this.
-RISC-V \cite{riscv} provides an extensible ISA, which encompasses the standard 
+RISC-V \cite{riscv} provides an extensible ISA, which encompasses the standard
 arithmetic, logical and control-flow operations with room for a number of user-
 defined instructions.
