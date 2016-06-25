@@ -221,7 +221,37 @@ Native insn execution. Offloading, optimizations.
 
 \section{Memory}
 \label{vm:memory}
-Memory model.
+Memory for raw packet data and contexts is allocated by port objects during the
+ingress processing phase. The FFVM is optimized to allow for zero-copy packet
+processing, where raw packet data resides in a physical device's dedicated
+memory. In certain cases device packet buffers contain extra memory for user
+data, which can store the context object as well to improve locality. When a
+port object does not posses the capability to provide persistant packet memory,
+a global packet context buffer can be allocated by the system. Figure
+\ref{mem_model} illustrates the three memory models currently supported by the
+FFVM.
+
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[scale=0.8]{mem_fig_c}
+    \caption{System buffer contains copy of packet.}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[scale=0.8]{mem_fig_b}
+    \caption{System buffer references packet.}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.55\textwidth}
+    \centering
+    \includegraphics[scale=0.8]{mem_fig_a}
+    \caption{Packet and context stored in device memory.}
+  \end{subfigure}
+  \caption{Freeflow packet context memory models.}
+  \label{mem_model}
+\end{figure}
 
 \section{Threading}
 \label{vm:threading}
