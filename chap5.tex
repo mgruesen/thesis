@@ -171,7 +171,7 @@ descriptors to act as a endpoint for communication. An illustration of the port
 object UML can be found in figure \ref{port_uml}. Virtual ports are derived
 from logical ports, and provide specialized functionality for the system. To
 further classify the port type, they can be either seen as an \emph{input}
-port, where data from an external source can be injected into the system, or an
+port, where data from an external source can be ingressed into the system, or an
 \emph{output} port, which sends data to other external or internal devices.
 Currently input ports can be either logical or physical, whereas output ports
 can be any port type (i.e. logical, physical, virtual).
@@ -192,7 +192,10 @@ global buffer pool. This gives a greater amount of flexibility in that the
 packet and context can exist in same memory region, potentially improving
 locality. As packets leave the system during the \emph{egress} phase, this
 memory is released back to the appropriate devices. Details about memory
-management semantics can be found in section \ref{vm:memory}.
+management can be found in section \ref{vm:memory}.
+
+After initializing a context with a new packet, the port sends the context to
+be processed in the application pipeline.
 
 \section{Tables}
 \label{vm:tables}
@@ -252,6 +255,20 @@ FFVM.
   \caption{Freeflow packet context memory models.}
   \label{mem_model}
 \end{figure}
+
+A global buffer consists of a packet buffer, a context, and a non-zero
+id. Packet buffers are pre-allocated 2048 byte regions that can easily
+accommodate IEEE 802.3 Ethernet frames that have a maximum size of 1523 bytes.
+The packet buffers are oversized to allow for the insertion of new protocol
+headers that may result during or after pipeline processing. Contexts residing
+in a global buffer contain a reference to the packet buffer, which by default
+points to a FFVM packet buffer. The id gives the offset into the global buffer
+pool, and allows ports to return the id back to the pool's free list. FFVM's
+free list is implemented as a min-heap, providing the next available packet
+buffer that can be allocated. During creation, and upon deallocation, a packet
+context buffer is set to a null state; each field in the context is default
+initialized and the packet buffer size is set to 0. In this state, accessing a
+context or the packet buffer it is associated with is undefined.
 
 \section{Threading}
 \label{vm:threading}
