@@ -106,8 +106,7 @@ Input information consists of data about the packets arrival into the system,
 such as the input logical and physical ports. The control information maintains
 the control flow of a context as it traverses processing pipelines.
 
-\lstset{basicstyle=\tiny}
-\begin{lstlisting}[language=c++]
+\begin{lstlisting}
 struct Decode_info {
   uint16_t    pos;     // Packet decoding offset
   Environment headers; // Saved packet header locations
