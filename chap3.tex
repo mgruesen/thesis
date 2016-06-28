@@ -1,6 +1,16 @@
 \chapter{HARDWARE VIRTUALIZATION}
 \label{hardware}
+Initial research into the domain of SDN was based around the utilization
+of frameworks providing low level access to networking resources. In order
+to maintain high performance in user level application space, these devices
+need to be virtualized. Network interfaces, both logical and physical, can 
+expose a variety of capabilities and features that need to be encapsulated
+to improve portability and optimal usage. The same is true for computational
+devices, including CPUs, Network Processing Units (NPUs), and other various
+hardware accelerators. 
 
+The following sections detail the frameworks considered as well as the 
+resulting implementation in the FFVM.
 
 \section{DPDK}
 \label{hardware:dpdk}
