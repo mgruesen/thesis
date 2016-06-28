@@ -65,11 +65,11 @@ available, memory architecture, and instruction sets. The CUDA library
 enables developers to write a single instance of a program and deploy
 it on a wide selection of supported GPUs. This is achieved by utilizing the
 NVIDIA CUDA Compiler (NVCC) which translates the higher level source code
-to the native device's machine code by way of an intermediate representation
+to the device's native machine code by way of an intermediate representation
 (IR). The NVIDIA Virtual Machine (NVVM) IR is based on the Low Level Virtual
 Machine (LLVM) IR used by the Clang compiler. Once the code has been lowered
 to the NVVM IR it can be translated to the parallel thread execution virtual
-machine and ISA, PTX. These instructions can be executed natively by any CUDA
+machine and ISA, PTX. These instructions are executed natively by any CUDA
 enabled GPU device.
 
 \subsection{Open Compute Language}
@@ -110,7 +110,11 @@ require the usage of Intel's Compiler Collection (ICC), as non-portable
 compiler directives are used throughout the framework and are not directly
 supported by the GNU Compiler Collection (GCC).
 
-\subsection{Open Data Plane}
+\subsection{Netmap}
+\label{related:netmap}
+Stuff on netmap \cite{netmap}.
+
+\subsection{OpenDataPlane}
 \label{related:frameworks:odp}
 The OpenDataPlane (ODP) project \cite{odp} establishes an open source API for
 defining networking data plane applications. ODP provides application
@@ -125,7 +129,7 @@ plane applications over an agregation of switching devices. OVS replaces
 the bridge between hypervisors running ontop of a distributed machine that
 is typically provided by OS kernels. The OVS controller is capable of managing
 pure software and/or hardware switchs, and supports the usage of specialized
-hardware accelerators. In Figure \ref{related:ovs_arch}, an illustration of
+hardware accelerators. In Figure \ref{ovs_arch}, an illustration of
 the OVS distributed architecture is presented.
 
 \begin{figure}[h]
@@ -148,6 +152,10 @@ register machine or an extended abstract machine developed by the authors.
 
 \subsection{RISC V}
 % Rewrite this.
-RISC-V \cite{riscv} provides an extensible ISA, which encompasses the standard
+RISC-V \cite{riscv} specifies an extensible ISA, which encompasses the standard
 arithmetic, logical and control-flow operations with room for a number of user-
-defined instructions.
+defined instructions. Support for variable length instructions, multiple 
+address spaces (32, 64, 128 bit), and modern parallelization architectures is
+also provided. RISC-V instruction execution requires the usage of RISC-V CPUs,
+currently provided through an ISA simulator (Spike), or a VM running a modified
+Linux kernel.
