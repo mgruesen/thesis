@@ -128,7 +128,17 @@ length of the desired fields as pairs in a binding environment, referred to as
 the decode information. This environment notes the offset of a field within the
 current protocol header, as well as the offset for each protocol header within
 the packet buffer. Utilizing this heavy weight approach to referencing protocol
-field information ...
+field information enforces a more precise data extraction plan and eliminates
+coherency issues.
+
+The raw packet data is accessed through a handle held by the context. Depending
+on the capabilities of the port that received the packet, this handle may point
+to a Freeflow packet buffer or dedicated port memory. Meta data provides
+``scratch'' space for applications to store additional information during
+pipeline processing. The action list is composed of instructions that are to
+be applied to a packet after exiting an application pipeline but before egress
+processing. These instructions are used to modify fields within a packet, and
+are explained further in Section \ref{vm:insn}.
 
 \begin{figure}[h]
 \centering
@@ -140,7 +150,10 @@ field information ...
 \section{Virtual Machine}
 \label{vm}
 The Freeflow Virtual Machine is composed of modular parts that a programmer can
-assemble into a virtual switch.
+assemble into a virtual switch. This flexibility allows for the instantiation
+of numerous switches with varying features and capabilities. In general,
+switches require a data plane instance with ports to handle packet I/O, and a
+compiled application object to drive packet processing.
 
 \begin{figure}[h]
 \centering
@@ -193,8 +206,11 @@ locality. As packets leave the system during the \emph{egress} phase, this
 memory is released back to the appropriate devices. Details about memory
 management can be found in section \ref{vm:memory}.
 
-After initializing a context with a new packet, the port sends the context to
-be processed in the application pipeline.
+After initializing a context with a new packet, the port passes the context to
+the application pipeline for processing. When the context exits the application
+pipeline, the resulting action list is applied to the packet. Finally the
+context enters the egress stage where the packet is forwarded to the designated
+\emph{output port} set in the context, or dropped.
 
 \section{Tables}
 \label{vm:tables}
@@ -205,17 +221,32 @@ as \emph{exact}, \emph{prefix}, or \emph{wild card}. All three table types are
 currently implemented by the FFVM, though support for prefix and wild card is
 incomplete.
 
-% Insert table figure here.
-
 Each entry in a flow table contains a \emph{key}, that is compared to a
 certain field within packet. Key types vary between match table types. For an
 exact match table the keys are integers of a set width, defined by the
 application. These keys are used to aggregate traffic containing similar
 characteristics into flows. Flows can be viewed as programs, or functions,
 that get executed when a packet matches that their key. Each flow defines a
-set of operations that are applied to packets.
+set of operations, or instructions, that are applied to packets.
 
-% Another table figure here.
+\begin{table}[h]
+  \centering
+  \begin{tabular}{||c | c||}
+   \hline
+   Input Port & Flow Instruction \\ [0.5ex]
+   \hline\hline
+   1 & output(2); \\
+   \hline
+   2 & output(1); \\
+   \hline
+   miss & drop; \\ [1ex]
+   \hline
+ \end{tabular}
+ \caption{A flow table using a context's input port as the key to create a
+ virtual ``wire'' between two ports, where traffic received from one port is
+ sent out the other.}
+ \label{flow_table}
+\end{table}
 
 \section{Instructions}
 \label{vm:insn}
