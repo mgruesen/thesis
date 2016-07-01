@@ -7,8 +7,8 @@ exploring the different implementation methods utilized in the domain of SDN,
 namely pure software and hardware, the benefits and deficits of each be
 evaluated and contribute towards a concrete specification. In a pure software
 implementation, most all of the underlying hardware components have been
-virtualized, providing more flexibility and compatibility at the cost of
-performance. A pure hardware implementation will materialize a high level
+abstracted, providing more flexibility and compatibility at the cost of
+performance. A pure hardware implementation will translate a high level
 language into optimized native instructions to keep performance high, but
 narrows the set of languages supported. In Figure \ref{overview}, the spectrum
 for these two methods is shown.
@@ -30,7 +30,7 @@ approach is not always ideal, especially in the domain of SDN where network
 switch architecture varies greatly between vendors in terms of capabilities
 and features. This contributes to a lack of generalization in modern networking
 where end-users are typically only able to specify configuration settings. In
-order to bridge the gap, hardware components can be virtualized to provide
+order to bridge the gap, hardware components can be abstracted to provide
 low level access to resources available in the system. A suitable execution
 environment would lie somewhere between these two, taking advantage of powerful
 compilers that can lower high level code while also leveraging low level
@@ -105,14 +105,15 @@ for both parts of a network switch, the control and data planes, and allow
 applications to have control and access to these resources at the user level.
 In addition to servicing the needs of applications, the runtime needs to be
 supported on a variety of architectures and utilize the materialized and
-virtualized resources available.
+abstracted resources available.
 
 \section{Contributions}
 \label{intro:contrib}
 The contributions presented in this thesis come from numerous experiments with
 low level networking hardware. These experiments helped characterize the
-problem domain with respect to low level virtualization of network interfaces and high level language translation to a native instruction set architecture 
-(ISA). 
+problem domain with respect to low level abstraction of network interfaces and
+high level language translation to a native instruction set architecture
+(ISA).
 
 % \subsection{Virtual Machine}
 % \label{intro:vm}
@@ -152,7 +153,7 @@ paradigm, the OpenFlow protocol, network applications, as well as various
 platforms and frameworks considered can be found here.
 
 In Chapters \ref{hardware} and \ref{insn}, the early investigations into
-hardware virtualization and instruction materialization are discussed,
+hardware abstraction and processing instructions are discussed,
 respectively. This section journals the different approaches that were
 considered in the design and implementation throughout this project, and
 explains the benefits, deficits, and lessons learned from each approach.
