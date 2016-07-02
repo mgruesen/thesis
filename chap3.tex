@@ -7,37 +7,46 @@ need to be abstracted. Network interfaces, both logical and physical, can
 expose a variety of capabilities and features that need to be encapsulated
 to improve portability and optimal usage. The same is true for computational
 devices, including CPUs, Network Processing Units (NPUs), and other various
-hardware accelerators.
-
-The following sections detail the frameworks considered as well as the
-resulting implementation in the FFVM.
+hardware accelerators. This chapter discusses the evaluation of low level
+port abstractions provided by DPDK, Section \ref{hardware:dpdk}, and Netmap,
+Section \ref{hardware:netmap}, as well as the conclusions drawn.
 
 \section{DPDK}
 \label{hardware:dpdk}
-Intel's DPDK provides users with a framework on which data plane
-applications can be built utilizing highly optimized constructs and
-device drivers. The examples laid out in the documentation are
-promising, and the desire to have low level access to underlying
-hardware in a system is more than satisfied in this implementation.
-However, there were a few road blocks on the path to embracing this
-powerful data plane runtime environment. First and foremost, the
-device drivers provided were specifically written for Intel brand
-hardware. If there is no genuine Intel network interface cards
-(NICs), a virtual machine would be necessary in order to emulate
-their functionality and be able to take advantage of the low level
-functionality, such as direct access to raw Ethernet packet data.
-At the time we were investigating this approach, DPDK was more in
-it's infancy (release 1.0, 1.1), and though there was a decent amount
-of documentation, the usage of their system was not very intuitive.
-Lastly there was the issue of language support, DPDK can only build
-C applications using GCC as C++ support is only available with the
-usage of Intel's C++ compiler. The combinations of these issues
-contributed to a negative impact on portability, and would ultimately
-lead us to investigate other approaches in the attempt to define
-a suitable port abstraction.
+Intel's DPDK provides users with a framework on which data plane applications
+can be built utilizing highly optimized constructs and device drivers. At the
+time of this investigation, the project was in the early stages of development
+(version 1.0, 1.1). The drivers provided by the development kit are written
+specifically for Intel brand networking devices. Due to a lack of compatible
+hardware, a virtual machine was provisioned to take advantage the low level
+access. In order to execute an application with the DPDK runtime environment,
+the host operating system required some additional modifications as well. A
+custom networking kernel module allows applications to bypass the host systems
+native networking stack, reducing the number of copies made between user and
+kernel space. Memory page size is also increased to reduce the number of page
+faults. The goal was to create a virtual ``wire'' between two Ethernet ports,
+such that data recieved by port A is sent by port B, and vice versa. An example
+application, L2 Forward, provided in the development kit served as a starting
+point for this experiment. The example, creates an \emph{external} wire between
+pairs of ports, where port A sends data to port B, and B sends to A. In order to
+reverse this behavior with an \emph{internal} wire, the forwarding behavior for
+each port needed to be changed. To achieve this, each port reads from it's
+partners receive queue and copies the entry into it's transmit queue. The
+destination addresses have to be changed from being statically hard coded into
+the port driver to a dynamic, mutable property. Execution of the modified
+application gives inconsistent results, and can require system restarts between
+runs to reconfigure the machine when errors occur. This is attributed to
+performance and abstraction penalties suffered from the use of the virtual
+machine as the runtime environment host. The requirements imposed by the runtime
+environment
+
+
 
 \section{Netmap}
 \label{hardware:netmap}
+
+\section{ODP}
+\label{hardware:odp}
 
 \section{Freeflow Ports}
 \label{hardware:ffports}
