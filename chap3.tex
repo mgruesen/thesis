@@ -28,18 +28,18 @@ host systems native networking stack, reducing the number of copies made
 between user and kernel space. Memory page size is also increased to reduce
 the number of page faults.
 
-\begin{figure}[h]
+\begin{figure}[h!]
   \centering
   \begin{subfigure}[b]{0.48\textwidth}
     \centering
-    \includegraphics{dpdk_l2_a}
+    \includegraphics[scale=0.9]{dpdk_l2_a}
     \caption{DPDK provided forwarding behavior, where a pair of ports sends
     data to and receives from the other.}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.48\textwidth}
     \centering
-    \includegraphics{dpdk_l2_b}
+    \includegraphics[scale=0.9]{dpdk_l2_b}
     \caption{Modified forwarding behavior, where a pair of ports sends the data
     received by the other.}
   \end{subfigure}
@@ -59,14 +59,6 @@ counterparts receive queue and sends a copy from itself.  The destination
 address fields have to be refactored from being statically hard coded in the
 port driver to a dynamic, mutable property.
 
-\begin{figure}[h]
-  \centering
-  \includegraphics[scale=0.75]{spectrum_dpdk}
-  \caption{DPDK's port abstraction limits portability by being too hardware
-  specific.}
-  \label{hardware:spectrum_dpdk}
-\end{figure}
-
 Execution of the modified application gives inconsistent results, and can
 require system restarts between runs to reconfigure the virtual machine when
 errors occur. This is attributed to performance and abstraction penalties
@@ -75,28 +67,98 @@ Though DPDK's optimized port drivers deliver solid performance,
 The results show that utilizing this framework for abstracting low level port
 resources would narrow the field of compatible physical devices to target.
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{spectrum_dpdk}
+  \caption{DPDK's port abstraction limits portability by being too hardware
+  specific.}
+  \label{hardware:spectrum_dpdk}
+\end{figure}
+
 \section{Netmap}
 \label{hardware:netmap}
 The second framework evaluated for port abstraction comes from the netmap
 project. Netmap provides low level access to network interfaces by diverting
 the flow of data to and from the interface away from the operating system, and
-towards a custom device.
+towards a custom device. Receive and transmit queues are mapped into user space
+where the raw data can be operated on directly rather than through the operating
+system network stack. Figure \ref{hardware:netmap_overview} illustrates the
+mechanism provided by netmap.
 
-\begin{figure}[h]
+\begin{figure}[h!]
+  \centering
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[scale=0.9]{netmap_overview_a}
+    \caption{User space applications using the kernel to access resources
+    creates coherency issues.}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[scale=0.9]{netmap_overview_b}
+    \caption{Netmap gives direct access to hardware memory resources in user
+    space.}
+  \end{subfigure}
+  \caption{Netmap provides an alternative way to access network interface
+  resources, namely the transmit and receive queues.}
+  \label{hardware:netmap_overview}
+\end{figure}
+
+The portability factor makes netmap a great candidate for a low level port
+abstraction framework, supporting hardware NIC, logical (e.g. UDP, TCP,
+UNIX sockets), and virtual (provided by the netmap VALE software switch) ports.
+Moving the memory address space for a network device into user space eliminates
+the need for coherency resolution through the operating system kernel, and gives
+an increase in performance while processing raw packet data. However there is a
+lack of control over the networking interfaces to allow applications to monitor
+the state and alter the configuration of ports. Netmap ports are currently
+supported by the Freeflow port abstraction to overcome the missing
+functionality.
+
+\begin{figure}[h!]
   \centering
   \includegraphics[scale=0.75]{spectrum_netmap}
-  \caption{Netmap's port abstraction is more portable, but incurs performance
-  penalties.}
+  \caption{Netmap's port abstraction is more portable, but lacks low level
+  control mechanisms.}
   \label{hardware:spectrum_netmap}
 \end{figure}
 
-Blah blah blah.
-
 \section{ODP}
 \label{hardware:odp}
-Stuff on ODP.
+The OpenDataPlane project provides an API for programming network data plane
+applications across multiple platforms. Currently, software implementations
+exist for Linux and DPDK backends as references for design and integration
+purposes. ODP allows for different backends in order to support a broader class
+of networking devices. Figure \ref{hardware:odp_overview} shows the possible
+architectural models that can be constructed using ODP.
 
-\begin{figure}[h]
+\begin{figure}[h!]
+  \centering
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[scale=0.9]{odp_overview_a}
+    \caption{ODP and Linux APIs expose the underlying hardware to applications.}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[scale=0.9]{odp_overview_b}
+    \caption{ODP and DPDK provide accelerated driver support to applications.}
+  \end{subfigure}
+  \caption{ODP can use a variety of backends to create different architectures.}
+  \label{hardware:odp_overview}
+\end{figure}
+
+ODP's strive for flexibility and performance is mirrored in the design of the
+FFVM, and support for the framework is being evaluated. The C API exposed gives
+enough user space control over networking interfaces while minimizing the
+performance cost incurred by hardware abstraction. Integration of ODP ports
+into the FFVM port abstraction is currently being evaluated. Figure
+\ref{hardware:spectrum_odp} shows where ODP's port implementation falls in the
+virtualization-materialization spectrum.
+
+\begin{figure}[h!]
   \centering
   \includegraphics[scale=0.75]{spectrum_odp}
   \caption{ODP's port abstraction strikes a good balance between portability
@@ -106,4 +168,17 @@ Stuff on ODP.
 
 \section{Conclusions}
 \label{hardware:concl}
-Stuff was done.
+During these three investigations, the design and implementation of the FFVM
+port abstraction evolved. The proper level of abstraction lies just above the
+middle of the virtualization-materialization spectrum, where programmers can
+maintain a high level of control over networking interfaces while utilizing
+optimized operational mechanisms provided in the target system. Figure
+\ref{hardware:spectrum_ffports} plots the current region FFVM ports occupy.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{spectrum_ffports}
+  \caption{The Freeflow VM port abstraction plotted along side the other
+  frameworks investigated.}
+  \label{hardware:spectrum_ffports}
+\end{figure}
