@@ -129,7 +129,16 @@ the decode information. This environment notes the offset of a field within the
 current protocol header, as well as the offset for each protocol header within
 the packet buffer. Utilizing this heavy weight approach to referencing protocol
 field information enforces a more precise data extraction plan and eliminates
-coherency issues.
+coherency issues. Figure \ref{context_binding} shows the resulting binding
+environment created after decoding the ethernet source and destination fields,
+as well as the IPv4 protocol and destination fields.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.9]{context_concrete}
+\caption{An example binding environment for an IPv4 Ethernet frame.}
+\label{context_binding}
+\end{figure}
 
 The raw packet data is accessed through a handle held by the context. Depending
 on the capabilities of the port that received the packet, this handle may point
@@ -140,24 +149,48 @@ be applied to a packet after exiting an application pipeline but before egress
 processing. These instructions are used to modify fields within a packet, and
 are explained further in Section \ref{vm:insn}.
 
-\begin{figure}[h]
-\centering
-\includegraphics[scale=0.5]{context_concrete}
-\caption{An example binding environment for an IPv4 Ethernet frame.}
-\label{context_binding}
-\end{figure}
+
 
 \section{Virtual Machine}
 \label{vm}
 The Freeflow Virtual Machine is composed of modular parts that a programmer can
 assemble into a virtual switch. This flexibility allows for the instantiation
 of numerous switches with varying features and capabilities. In general,
-switches require a data plane instance with ports to handle packet I/O, and a
-compiled application object to drive packet processing.
+switches require control and data planes as well as a compiled network
+applications to drive each component. A FFVM virtual switch can be assembled
+by creating a data plane instance, in which port resources are added and an
+application is loaded. User space drivers provision the machine with these
+components and execute compiled applications. An example driver is shown in the
+following listing.
+
+\begin{lstlisting}
+// Create a data plane instance named 'dp1'.
+ff::dataplane dp = "dp1";
+
+// Add virtual (internal) ports and two TCP sockets.
+dp.add_virtual_ports();
+ff::Port* port1 = new ff::Port_tcp(1);
+ff::Port* port2 = new ff::Port_tcp(2);
+dp.add_port(port1);
+dp.add_port(port2);
+
+// Load a sample application named 'sample.app'.
+dp.load_application("sample.app");
+
+// Set data plane configuration to 'up', starting execution.
+dp.up();
+\end{lstlisting}
+
+The driver makes a virtual switch with a single data plane, named ``dp1'', that
+contains the pre-defined virtual ports and two TCP ports, with ids 1 and 2
+respectively. After allocating port resources, an application named
+``sample.app'' is loaded, allowing the system to perform table configuration
+and import the pipeline processing symbols. Figure \ref{ff_system} illustrates
+the orchestration of the components utilized in the example driver listing.
 
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.5]{ff_system}
+\includegraphics[scale=0.53]{ff_system}
 \caption{The Virtual Machine System Architecture}
 \label{ff_system}
 \end{figure}
@@ -190,7 +223,7 @@ can be any port type (i.e. logical, physical, virtual).
 
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.65]{ff_port_uml}
+\includegraphics[scale=0.85]{ff_port_uml}
 \caption{Freeflow port uml diagram.}
 \label{port_uml}
 \end{figure}
@@ -258,29 +291,29 @@ Memory for raw packet data and contexts is allocated by port objects during the
 ingress processing phase. The FFVM is optimized to allow for zero-copy packet
 processing, where raw packet data resides in a physical device's dedicated
 memory. In certain cases device packet buffers contain extra memory for user
-data, which can store the context object as well to improve locality. When a
-port object does not posses the capability to provide persistant packet memory,
-a global packet context buffer can be allocated by the system. Figure
-\ref{mem_model} illustrates the three memory models currently supported by the
-FFVM.
+data, which can store the context object as well to improve locality. Another
+benefit of storing the packet and context in the same region of memory is that
+the two entities can grow dynamically; the context grows as actions are appended
+to it's action list and the packet grows when new protocol headers are pushed
+onto a header binding environment. When a port object does not posses the
+capability to provide persistant packet memory, a global packet context buffer
+can be allocated by the system. Figure \ref{mem_model} illustrates the two
+memory models currently supported by the FFVM.
 
 \begin{figure}[h]
   \centering
   \begin{subfigure}[b]{0.48\textwidth}
     \centering
-    \includegraphics[scale=0.8]{mem_fig_c}
-    \caption{System buffer contains copy of packet.}
+    \includegraphics[scale=0.9]{mem_fig_a}
+    \caption{Freeflow allocates context memory that references packet data
+    in port memory.}
   \end{subfigure}
   \hfill
-  \begin{subfigure}[b]{0.45\textwidth}
+  \begin{subfigure}[b]{0.48\textwidth}
     \centering
-    \includegraphics[scale=0.8]{mem_fig_b}
-    \caption{System buffer references packet.}
-  \end{subfigure}
-  \begin{subfigure}[b]{0.55\textwidth}
-    \centering
-    \includegraphics[scale=0.8]{mem_fig_a}
-    \caption{Packet and context stored in device memory.}
+    \includegraphics[scale=0.9]{mem_fig_b}
+    \caption{Port memory can accomodate dynamically sized packet and context
+    objects.}
   \end{subfigure}
   \caption{Freeflow packet context memory models.}
   \label{mem_model}
@@ -297,7 +330,7 @@ pool, and allows ports to return the id back to the pool's free list. FFVM's
 free list is implemented as a min-heap, providing the next available packet
 buffer that can be allocated. During creation, and upon deallocation, a packet
 context buffer is set to a null state; each field in the context is default
-initialized and the packet buffer size is set to 0. In this state, accessing a
+initialized and the packet size is set to 0. In this state, referencing a
 context or the packet buffer it is associated with is undefined.
 
 \section{Threading}
