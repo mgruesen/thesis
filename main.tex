@@ -26,9 +26,10 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{color}
-%x\usepackage{tabular}
+\usepackage{tabularx}
 
 \graphicspath{ {figs/} }
+
 \lstset{
 	tabsize=2,
 	language=[GNU]C++,
@@ -60,6 +61,7 @@
 %
 \def\ds{\displaystyle}
 \def\E{\epsilon}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
 %
 
 \title{HIGHLY PROGRAMMABLE NETWORK SWITCHES}
