@@ -334,8 +334,44 @@ context or the packet buffer it is associated with is undefined.
 \section{Threading}
 \label{vm:threading}
 The FFVM supports multiple threading architectures to maximize execution
-resource utlization.
+resource utlization. Behavior for FFVM components, such as port objects and
+application pipelines, can be defined as free functions in a driver and
+executed in its own thread. Threads contribute to the modular nature of the
+FFVM and can be treated as building blocks to produce different execution
+models. FFVM provides a simple threading interface built on the POSIX thread
+library (pthread) \cite{pthread}, that executes a pre-allocated work routine
+and passes the thread id as the argument. Synchronization mechanisms and
+configuration settings, or attributes, are optionally provided. The following
+listing shows how a FFVM thread can be constructed with an initial id and work
+routine, and also re-assigned while the thread is not in a ``running'' state.
 
+\begin{lstlisting}
+void* port_work(void* arg){
+  // ...
+}
+
+void* port_work2(void* arg){
+  // ...
+}
+
+int main(int argc, char** argv){
+  ff::Thread thread = { 1, port_work };
+  thread.run();
+  // ...
+  thread.halt();
+  thread.assign(2, port_work2);
+  thread.run()
+  // ...
+  thread.halt();
+  return 0;
+}
+\end{lstlisting}
+
+In addition to the threading interface, the FFVM also provides shared data
+structures such as queues and object pools. Concurrent queue implementations
+exist for locked and lockfree access, allowing for more flexibility in the
+threading architecture being modeled. Object pools allocate reusable global
+resources that can also be shared across thread boundaries.
 
 \section{ABI}
 \label{vm:abi}
