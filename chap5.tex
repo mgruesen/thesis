@@ -65,7 +65,47 @@ Each decoder extracts values from a packet which are used in table lookups.}
 
 Hosted Freeflow applications are loaded dynamically through application binary
 files. These files are the result of compilation from application source to
-native shared object libraries. 
+native shared object libraries. Currently only one instance of an application
+binary can be loaded into a FFVM process space. Application life cycles are
+managed through symbols exported from the binary and called by the FFVM. All
+of these functions use a handle to a data plane object, \emph{dp}, to
+access data plane resources. To mitigate legal calls to these functions, the
+application's current \emph{state} is evaluated. Below the different
+application states and the four functions for manipulating them are explained.
+
+\begin{itemize}
+  \item \texttt{init} - The initial state of an application after the handle to
+  the binary has been established.
+  \item \texttt{ready} - The application has been loaded and its resources have
+  been properly allocated.
+  \item \texttt{running} - The application is being executed. Data plane state
+  and configuration changes can be received.
+  \item \texttt{stopped} - The application is halted. Data plane state and
+  configuration changes are ignored.
+\end{itemize}
+
+\begin{lstlisting}
+ff_load(dp);
+ff_unload(dp);
+\end{lstlisting}
+
+The \texttt{ff\_load} function initializes global data plane resources required
+by the application, such as tables. When successful the application state is
+set to ``ready'', or is left in an ``init'' state when errors occur. During
+FFVM teardown, a call to \texttt{ff\_unload} will release the allocated
+resources if the application is not in a ``running'' state.
+
+\begin{lstlisting}
+ff_start(dp);
+ff_stop(dp);
+\end{lstlisting}
+
+Applications ``learn'' about state and configuration changes to the data plane
+through events. The \texttt{ff\_start} function sets the application state to
+``running'', allowing these events to be delivered. A call to start is only
+valid when the current state of the application is ``ready'' or ``stopped''. The
+\texttt{ff\_stop} function suspends the notification of changes in the data
+plane to the application and sets the state to ``stopped''.
 
 \section{Packet Context}
 \label{vm:packet-context}
