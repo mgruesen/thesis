@@ -375,4 +375,26 @@ resources that can also be shared across thread boundaries.
 
 \section{ABI}
 \label{vm:abi}
-What they can use.
+The FFVM application binary interface exposes a set of symbols and calling
+conventions that can be utilized by applications at run time. These ``system
+calls'' allow hosted applications to request system resources. In this section
+the more pertinent functions are discussed.
+
+\begin{lstlisting}
+ff_create_table(dp, width, n, type);
+ff_delete_table(dp, tbl);
+\end{lstlisting}
+
+A call to the \texttt{ff\_create\_table} function returns a newly allocated
+flow table in the given data plane instance \emph{dp} with an application
+defined key \emph{width} in bytes, an initial size of \emph{n} entries, and
+matching table \emph{type}. The \texttt{ff\_delete\_table} call releases the
+resources allocated in the given table \emph{tbl}.
+
+\begin{lstlisting}
+ff_lookup_flow(tbl, k);
+ff_insert_flow(tbl, k, f);
+ff_remove_flow(tbl, k);
+\end{lstlisting}
+
+Flow table modifications can be made using the \texttt{ff\_*\_flow} functions.
