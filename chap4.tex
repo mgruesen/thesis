@@ -15,22 +15,78 @@ from high level languages are evaluated.
 \label{insn:riscv}
 RISC-V provides a base ISA that leaves room for the addition of custom, user
 defined instructions that can be executed natively on a CPU architecture that
-implements the ISA. For a network switch VM, this ISA is well suited to be a
-natively supported ISA, as common network application instructions can be
-optimized.
+implements the ISA. For an abstract network switch, this ISA is well suited to
+be a natively supported, as typical network application operations can be
+optimized. Specialized instructions can be added for packet decoding, table
+matching, and packet modification (e.g. push/pop header tags). Many langauges
+support these mechanisms from a high level perspective, but lack support to
+translate them down to native instructions. Network processors vary between
+vendors, but typically do not implement a full, general purpose ISA that would
+be present on a CPU. For example, floating point arithmetic is not used in
+network processing and as a result, NPUs do not contain floating point units.
+The hardware is fine tuned for the domain in which it operates in, and the
+machine code needs to reflect that.
+
+The core of any RISC-V implementation is a base integer ISA that can have many
+optional instruction set ``extensions'' added to it. Outside of the core, each
+extension can be considered standard or non-standard. Standard extensions
+provide semantics for multiplication/division, atomic, and floating point
+operations and do not cause conflicts with one another. Non-standard extensions
+are unmanaged. They can be highly specialized and/or optimized but do not
+provide compability guarantees with standard extensions. The modular nature
+of the ISA allows for the full customization of a RISC-V variant to suit the
+needs of a particular implementation.
+
+As the RISC-V ISA is only able to be natively executed by virtual CPU's, an
+interpreter is required to process the instruction set. This approach would
+allow for the execution of natively specialized network instructions but
+sacrifices performance for the added flexibility. The FFVM instruction set
+needs to be flexible to support specialized networking operations but must also
+execute efficiently. Figure \ref{spectrum_riscv} shows where the RISC-V
+instruction set lies on the virtualization-materialization spectrum.
 
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.75]{spectrum_riscv}
   \caption{RISC-V currently relies on virtual CPU's that natively execute the
-  ISA. Without a physical device, the instructions must be interpreted.}
+  ISA.}
   \label{spectrum_riscv}
 \end{figure}
 
 \section{HSAIL}
 \label{insn:hsail}
-\cite{hsail}
+The HSA intermediate language, or HSAIL, is the intermediate representation
+which serves as an abstract native instruction set for HSA compatible parallel
+computing devices. These devices include multicore CPU's, GPU's, and other
+hardware accelerators. HSAIL programs can be executed natively on devices that
+are HSA compliant, or can be just-in-time compiled to the targets machine code
+and loaded if not.
+
+As the HSA focuses on the general problem of abstracting device functionality
+in the domain of parallel computing, networking processors and the specialized
+hardware accelerators contained in most switches would fall into the
+non-compliant category at this time. However the strategy implemented in HSAIL,
+and many other heterogeneous computing platforms, is becoming the commonplace
+approach to enable single source programming for multiple target devices with
+varying capabilities and features. Pushing the application logic into the
+hardware is the most efficient way to process instructions. Figure
+\ref{spectrum_hsail} plots the HSAIL instruction set on the spectrum.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{spectrum_hsail}
+  \caption{HSAIL applications can be executed natively by HSA complaint devices,
+  or translated to a target devices machine code.}
+  \label{spectrum_hsail}
+\end{figure}
 
 \section{Native Machine Code}
 \label{insn:native}
-To execute native code what resources do you need to provide?
+
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.75]{spectrum_insn}
+  \caption{}
+  \label{spectrum_insn}
+\end{figure}
