@@ -1,16 +1,14 @@
 \chapter{EARLY INVESTIGATION: HARDWARE ABSTRACTION}
 \label{hardware}
-Initial research into the domain of SDN was based around the utilization
-of frameworks providing low level access to networking resources. In order
-to maintain high performance in user level application space, these devices
-need to be abstracted. Network interfaces, both logical and physical, can
-expose a variety of capabilities and features that need to be encapsulated
-to improve portability and optimal usage. The same is true for computational
-devices, including CPUs, Network Processing Units (NPUs), and other various
-hardware accelerators. This chapter discusses the evaluation of low level
-port abstractions provided by DPDK, Section \ref{hardware:dpdk}, and Netmap,
-Section \ref{hardware:netmap}, mid-level port abstractions implemented in ODP,
-Section \ref{hardware:odp}, as well as the conclusions drawn in Section
+The initial research for this thesis into the domain of SDN was based around
+the utilization of frameworks that provide low level access to networking
+resources. In order to maintain high performance and control in user level
+application space, these devices need to be abstracted. Network interfaces,
+both logical and physical, can expose a variety of capabilities and features
+that need to be properly encapsulated. This chapter discusses the evaluation of
+low level port abstractions provided by DPDK, Section \ref{hardware:dpdk}, and
+Netmap, Section \ref{hardware:netmap}, mid-level port abstractions implemented
+in ODP, Section \ref{hardware:odp}, as well as the conclusions drawn in Section
 \ref{hardware:concl}.
 
 \section{DPDK}
