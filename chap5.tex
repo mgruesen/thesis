@@ -93,7 +93,7 @@ MAC addresses which have a width of 48 bits). Storing these values in memory
 results in wasted space, as larger data structures would need to be utilized.
 Structure packing pragmas and bit width specifiers can be used to overlap
 memory regions when the desired bit width is less than the standard width for
-that type (e.g. \lstinline{std::uint_64 : 48;}). However storing a copy of the
+that type (e.g. \texttt{std::int\_64:48;}). However storing a copy of the
 packet data would result in coherency issues, negatively impacting
 performance. Instead the fields within headers are stored in a \emph{binding
 environment}, discussed in the following section.
@@ -335,7 +335,9 @@ context or the packet buffer it is associated with is undefined.
 
 \section{Threading}
 \label{vm:threading}
-Threading models.
+The FFVM supports multiple threading architectures to maximize execution
+resource utlization.
+
 
 \section{ABI}
 \label{vm:abi}

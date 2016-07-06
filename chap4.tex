@@ -82,11 +82,22 @@ hardware is the most efficient way to process instructions. Figure
 
 \section{Native Machine Code}
 \label{insn:native}
+The emphasis on the balance between flexibility and efficiency with respect to
+processing instructions is growing in many facets of computing. As hardware
+evolves and becomes more disjoint from the CPU, the ability to efficiently
+utilize the individual components lessens. The modular ISA provided by RISC-V
+presents a way to build on a simple core instruction set that can be supported
+by multiple devices in a system and allow for a single source application to
+execute natively. However the lack of materializated RISC-V processors forces
+less efficient execution environments to be implemented.
 
+Figure \ref{spectrum_insn} shows where the different strategies for translating
+high level code to native machine code lie on the spectrum.
 
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.75]{spectrum_insn}
-  \caption{}
+  \caption{The FFVM processes instructions in native machine code format to
+  ensure efficient execution.}
   \label{spectrum_insn}
 \end{figure}
