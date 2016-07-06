@@ -63,6 +63,10 @@ Each decoder extracts values from a packet which are used in table lookups.}
 \label{app_pipeline}
 \end{figure}
 
+Hosted Freeflow applications are loaded dynamically through application binary
+files. These files are the result of compilation from application source to
+native shared object libraries. 
+
 \section{Packet Context}
 \label{vm:packet-context}
 Network packets are arranged as nested protocol headers, which contain fields
@@ -397,4 +401,21 @@ ff_insert_flow(tbl, k, f);
 ff_remove_flow(tbl, k);
 \end{lstlisting}
 
-Flow table modifications can be made using the \texttt{ff\_*\_flow} functions.
+Flow entry matching is executed with a call to \texttt{ff\_lookup\_flow} which
+searches for a key \emph{k} in a flow table \emph{tbl}. Table modifications can
+be made using \texttt{ff\_insert\_flow} to add a new key \emph{k} with the
+flow \emph{f} to table \emph{tbl}, and \texttt{ff\_remove\_flow} to remove the
+key \emph{k} from the table \emph{tbl}. If the key already exists when the call
+to insert is made, the associated flow object is updated, whereas a call to
+remove a non-existent key from a table has no effect.
+
+\begin{lstlisting}
+ff_output(cxt, p);
+ff_drop(cxt);
+\end{lstlisting}
+
+The \texttt{ff\_output} function sets the \emph{output\_port} field in a context
+\emph{cxt} to the id of the given port \emph{p}. A call to the \texttt{ff\_drop}
+function effectively sets the \emph{output\_port} field in the context \emph{cxt}
+to the data plane drop port id, but terminates the further processing in the
+pipeline stage it was invoked from.
