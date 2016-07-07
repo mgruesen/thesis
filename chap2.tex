@@ -8,15 +8,18 @@ specification. Next comes an overview of the different platforms and frameworks
 considered during the course of this research effort. In the final topic of
 this chapter the NetASM and RISC-V ISAs are discussed.
 
+
 \section{Software Defined Networking}
 \label{related:sdn}
 SDN provides a networking device model where the control and data planes are
-decoupled from one another, where a single control plane is responsible for
+decoupled from one another; a single control plane can be responsible for
 distributing application execution across a set of network switches viewed as
 a unified data plane instance. Applications generally operate at the control
-plane level and rely on distributed platforms to push the logic down to the hardware level.
-Allowing users to define their own control and data plane
-logic enables the creation and adoption of custom networking protocols.
+plane level and rely on distributed platforms to push the logic down to the
+hardware level. Allowing users to define their own control and data plane
+logic enables the creation and adoption of custom networking protocols. The
+amount of control gained with respect to the shape and behavior of the network
+being managed creates more intelligent networks.
 
 % Work this in somewhere
 % Not all networking applications operate in the same conceptual space, that is,
@@ -26,10 +29,18 @@ logic enables the creation and adoption of custom networking protocols.
 \subsection{OpenFlow}
 \label{related:of}
 % Add more to this.
-The OpenFlow \cite{openflow} model defines a messaging layer that the control
-and, potentially distributed, data plane(s) can communicate through. This is
-embodied in the OpenFlow Protocol, which specifies a set of ``instructions''
-that the control and data planes must support. 
+The OpenFlow \cite{openflow} SDN model defines a switch that separates and
+distributes the control and data planes. Centralized controllers aggregate
+data plane switches and communicate over a dedicated channel utilizing the
+OpenFlow protocol. The protocol defines messages for packet I/O, data plane
+resource modifications, as well as state and configuration queries.
+
+An OpenFlow switch's data plane is can be viewed as a flow table that defines
+forwarding behavior for packets that match a particular set of fields within
+a packet header. Packets that do not match entries in a flow table are sent
+to the controller for further inspection. The controller is able to update flow
+tables by installing new forwarding rules for packets that match ones sent
+from the data plane.
 
 \subsection{DPDK}
 \label{related:dpdk}
@@ -39,9 +50,7 @@ platform utilizes custom drivers that provide raw access to networking devices
 and computational resources. The system is tuned to natively support Intel
 brand hardware and allows users to create C applications that interface with
 the runtime environment. Support for higher level applications, such as C++,
-require the usage of Intel's Compiler Collection (ICC), as non-portable
-compiler directives are used throughout the framework and are not directly
-supported by the GNU Compiler Collection (GCC).
+require the usage of Intel's Compiler Collection (ICC).
 
 \subsection{Netmap}
 \label{related:netmap}
@@ -62,13 +71,16 @@ knowledge of the capabilities and features present in an execution environment.
 \label{related:ovs}
 Open Virtual Switch (OVS) \cite{ovs} enables the distribution of data
 plane applications over an agregation of switching devices. OVS replaces
-the bridge between hypervisors running ontop of a distributed machine that
+the bridge between hypervisors running on top of a distributed machine that
 is typically provided by OS kernels. The OVS controller is capable of managing
-pure software and/or hardware switchs, and supports the usage of specialized
+pure software and/or hardware switches, and supports the usage of specialized
 hardware accelerators.
 
 \section{Languages}
 \label{related:lang}
+SDN programming languages exemplify the features and capabilities programmers
+want to be supported in an SDN application execution environment.
+
 
 \subsection{P4}
 \label{related:p4}
@@ -139,26 +151,39 @@ register machine or an extended abstract machine developed by the authors.
 
 \subsection{RISC V}
 \label{related:riscv}
-% Rewrite this.
 RISC-V \cite{riscv} specifies an extensible ISA, which encompasses the standard
 arithmetic, logical and control-flow operations with room for a number of user-
 defined instructions. Support for variable length instructions, multiple
-address spaces (32, 64, 128 bit), and modern parallelization architectures is
+address spaces (32, 64, 128 bit), and modern parallelization architectures are
 also provided. RISC-V instruction execution requires the usage of RISC-V CPUs,
 currently provided through an ISA simulator (Spike), or a VM running a modified
 Linux kernel.
 
 \section{Event Processing Frameworks}
 \label{related:event}
-Discuss the frameworks considered.
+One of the goals in SDN is to make networks more reactive, more intelligent.
+Event processing frameworks provide many of the mechanisms required to implement
+typical networking application behavior. The final related works describe the
+Seastar and libevent projects.
 
 \subsection{Seastar}
 \label{related:seastar}
 The Seastar project \cite{seastar}, is an open source C++ framework that
-takes advantage of modern architectural designs present in many high
-performance servers.
+optimizes applications for modern architectural features supported in many high
+performance, highly parallel servers. These features include the use of different
+networking stacks, modern language features for concurrent programming, and low
+overhead lock-free message passing between computing cores. The combination of
+these features lets the framework host powerful event driven applications.
+Support for Seastar warrants high end hardware that can make full use of the
+framework and was deemed too exotic to integrate at this time.
+
 
 \subsection{Libevent}
 \label{related:libevent}
 Libevent \cite{libevent} exposes an API for executing function callbacks
-triggered by file descriptor, signal, and timeout events.
+triggered by file descriptor, signal, and timeout events to simplify the
+development of event driven network server applications. Supporting numerous
+polling mechanisms on different platforms (Linux, Mac, Windows) allows
+applications to be highly portable and efficient. The dependency on file
+descriptors makes supporting port objects that are not socket based difficult
+and inefficient.
