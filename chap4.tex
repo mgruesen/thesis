@@ -89,10 +89,11 @@ utilize the individual components lessens. The modular ISA provided by RISC-V
 presents a way to build on a simple core instruction set that can be supported
 by multiple devices in a system and allow for a single source application to
 execute natively. However the lack of materializated RISC-V processors forces
-less efficient execution environments to be implemented.
-
-Figure \ref{spectrum_insn} shows where the different strategies for translating
-high level code to native machine code lie on the spectrum.
+less efficient execution environments to be used. In order to achieve optimal
+usage of multiple computing units driven by a single application, the
+instructions executed on a given unit must be translated to the target devices's
+native ISA. Figure \ref{spectrum_insn} shows where the different strategies for
+translating high level code to native machine code lie on the spectrum.
 
 \begin{figure}[h!]
   \centering
