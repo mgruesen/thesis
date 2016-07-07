@@ -1,7 +1,7 @@
 \chapter{FREEFLOW}
 \label{ff}
 The Freeflow project aims to bridge the gap between high level network
-programming langauges and low level networking hardware by defining an ideal
+programming languages and low level networking hardware by defining an ideal
 execution environment for network applications. Evaluating the benefits and
 deficits with respect to flexibility and performance provides a more accurate
 level of virtualization or materialization to utilize. In Figure \ref{ff_arch}
@@ -100,7 +100,7 @@ ff_unload(dp);
 The \texttt{ff\_load} function initializes global data plane resources required
 by the application, such as tables. When successful the application state is
 set to ``ready'', or is left in an ``init'' state when errors occur. During
-FFVM teardown, a call to \texttt{ff\_unload} will release the allocated
+FFVM tear down, a call to \texttt{ff\_unload} will release the allocated
 resources if the application is not in a ``running'' state.
 
 \begin{lstlisting}
@@ -163,7 +163,7 @@ environment}, discussed in the following section.
 \subsection{Context}
 The packet \emph{context} provides contextual information about an associated
 packet in the system. This is where applications store input, control, and
-decoder information, as well as application metadata and build action lists.
+decoder information, as well as application meta data and build action lists.
 Input information consists of data about the packets arrival into the system,
 such as the input logical and physical ports. The control information maintains
 the control flow of a context as it traverses processing pipelines.
@@ -192,7 +192,7 @@ current protocol header, as well as the offset for each protocol header within
 the packet buffer. Utilizing this heavy weight approach to referencing protocol
 field information enforces a more precise data extraction plan and eliminates
 coherency issues. Figure \ref{context_binding} shows the resulting binding
-environment created after decoding the ethernet source and destination fields,
+environment created after decoding the Ethernet source and destination fields,
 as well as the IPv4 protocol and destination fields.
 
 \begin{figure}[h!]
@@ -242,7 +242,7 @@ dp.up();
 \end{lstlisting}
 
 The driver makes a virtual switch with a single data plane, named ``dp1'', that
-contains the pre-defined virtual ports and two TCP ports, with ids 1 and 2
+contains the predefined virtual ports and two TCP ports, with ids 1 and 2
 respectively. After allocating port resources, an application named
 ``sample.app'' is loaded, allowing the system to perform table configuration
 and import the pipeline processing symbols. Figure \ref{ff_system} illustrates
@@ -362,7 +362,7 @@ benefit of storing the packet and context in the same region of memory is that
 the two entities can grow dynamically; the context grows as actions are appended
 to it's action list and the packet grows when new protocol headers are pushed
 onto a header binding environment. When a port object does not posses the
-capability to provide persistant packet memory, a global packet context buffer
+capability to provide persistent packet memory, a global packet context buffer
 can be allocated by the system. Figure \ref{mem_model} illustrates the two
 memory models currently supported by the FFVM.
 
@@ -378,7 +378,7 @@ memory models currently supported by the FFVM.
   \begin{subfigure}[b]{0.48\textwidth}
     \centering
     \includegraphics[scale=0.9]{mem_fig_b}
-    \caption{Port memory can accomodate dynamically sized packet and context
+    \caption{Port memory can accommodate dynamically sized packet and context
     objects.}
   \end{subfigure}
   \caption{Freeflow packet context memory models.}
@@ -386,9 +386,9 @@ memory models currently supported by the FFVM.
 \end{figure}
 
 A global buffer consists of a packet buffer, a context, and a non-zero
-id. Packet buffers are pre-allocated 2048 byte regions that can easily
+id. Packet buffers are preallocated 2048 byte regions that can easily
 accommodate IEEE 802.3 Ethernet frames that have a maximum size of 1523 bytes.
-The packet buffers are oversized to allow for the insertion of new protocol
+The packet buffers are over sized to allow for the insertion of new protocol
 headers that may result during or after pipeline processing. Contexts residing
 in a global buffer contain a reference to the packet buffer, which by default
 points to a FFVM packet buffer. The id gives the offset into the global buffer
@@ -402,12 +402,12 @@ context or the packet buffer it is associated with is undefined.
 \section{Threading}
 \label{vm:threading}
 The FFVM supports multiple threading architectures to maximize execution
-resource utlization. Behavior for FFVM components, such as port objects and
+resource utilization. Behavior for FFVM components, such as port objects and
 application pipelines, can be defined as free functions in a driver and
 executed in its own thread. Threads contribute to the modular nature of the
 FFVM and can be treated as building blocks to produce different execution
 models. FFVM provides a simple threading interface built on the POSIX thread
-library (pthread) \cite{pthread}, that executes a pre-allocated work routine
+library (pthread) \cite{pthread}, that executes a preallocated work routine
 and passes the thread id as the argument. Synchronization mechanisms and
 configuration settings, or attributes, are optionally provided. The following
 listing shows how a FFVM thread can be constructed with an initial id and work
@@ -437,7 +437,7 @@ int main(int argc, char** argv){
 
 In addition to the threading interface, the FFVM also provides shared data
 structures such as queues and object pools. Concurrent queue implementations
-exist for locked and lockfree access, allowing for more flexibility in the
+exist for locked and lock-free access, allowing for more flexibility in the
 threading architecture being modeled. Object pools allocate reusable global
 resources that can also be shared across thread boundaries.
 

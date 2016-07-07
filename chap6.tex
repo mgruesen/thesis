@@ -122,7 +122,7 @@ the FFVM. Further explanations of the different threading models used are found
 in Section \ref{expr:models}. In a multi-threaded architecture the routines
 ports execute are defined as free functions, where each port receives packets
 and after pipeline processing places a copy of the context into a transmit queue
-tied to each port. A simplified listing of the initial multithreaded wire
+tied to each port. A simplified listing of the initial multi-threaded wire
 driver is shown below.
 
 \begin{lstlisting}
@@ -172,21 +172,21 @@ main(){
 
 In this setup the only resource that can cause concurrency issues is the global
 send queue associated with each port. The initial implementation of the FFVM
-concurrent queue utilized mutexes to control read/write access from multiple
-threads, however the bottlekneck created by the locking mechanism drastically
-reduced performance. To provide a concurrent lockfree queue, an implementation
+concurrent queue utilized mutex locks to control read/write access from multiple
+threads, however the bottleneck created by the locking mechanism drastically
+reduced performance. To provide a concurrent lock-free queue, an implementation
 was integrated from the Boost C++ libraries \cite{boost}. Performance improved
-greatly with the usage of the lockfree queue, yet there were still issues with
+greatly with the usage of the lock-free queue, yet there were still issues with
 memory usage. Each port creates a local context and pushes a copy into the
 send queue for the output port, and context is then copied again before being
 sent from the designated output port. This warranted the need for a reusable
-object pool, where contexts and packet data would reside in a pre-allocated
+object pool, where contexts and packet data would reside in a preallocated
 system buffer. Rather than copying the context to and from the send queues, the
 buffer id is enqueued. Ports are able to access the context and packet through
 the buffer pool using the buffer id as the offset into the pool's underlying
-data store. The final optimzation added in this experiment was to have ports
+data store. The final optimization added in this experiment was to have ports
 cache a local store of processed buffer ids and copy the contents of the local
-store when it is ``full''. Perfomance increased greatly over the previous driver
+store when it is ``full''. Performance increased greatly over the previous driver
 implementation by utilizing re-usable packet buffers and the local store of
 buffer ids. A listing for the final wire driver is show below.
 
@@ -243,7 +243,7 @@ work stub to a thread.
 \label{expr:models-single}
 As a baseline implementation for most applications, an STA driver will service
 the FFVM and the server. The server port and FFVM ports can be tied to a polling
-mechanism to switch between events occuring on multiple port objects. This
+mechanism to switch between events occurring on multiple port objects. This
 architecture places the port and application pipeline processing on an even
 playing field. A process diagram for the STA wire driver is show in Figure
 \ref{wire_sta_diag}.
@@ -258,7 +258,7 @@ playing field. A process diagram for the STA wire driver is show in Figure
 \subsection{Thread Per Port}
 \label{expr:models-port}
 In a thread per port (TPP) model, the server and FFVM ports are separated to
-allow packet I/O to operate asynchroneously. The main thread from the driver
+allow packet I/O to operate asynchronously. The main thread from the driver
 handles the acceptance of new connections to the server and spawns a new thread
 to execute the port work routine over them. Figure \ref{wire_tpp_diag}
 illustrates the TPP wire driver process.
@@ -334,8 +334,8 @@ an application. For the purpose of this experiment the baseline case, the STA
 wire driver, is compared against the performance of the multiple versions of
 the TPP wire driver. Each TPP driver version corresponds to different shared
 resource strategies implemented. TPP-1 uses locked queues and copies the
-context on each push/pop, while TPP-2 utilizes lockfree queues. In TPP-3,
-lockfree queues hold containers of reusable buffer ids that are cached by each
+context on each push/pop, while TPP-2 utilizes lock-free queues. In TPP-3,
+lock-free queues hold containers of reusable buffer ids that are cached by each
 thread locally. Table \ref{wire_performance} lists the observed performance
 for all four of the Freeflow wire implementations tested.
 
@@ -363,6 +363,6 @@ for all four of the Freeflow wire implementations tested.
 With each version of the TPP wire driver, the resulting performance of the FFVM
 hosted application changes. The initial TPP version resulted in a major slowdown
 with respect to packet throughput, but that issue was resolved by the use of
-lockfree queue structures in the second version. The final version includes
+lock-free queue structures in the second version. The final version includes
 more optimizations were implemented and gave way to the transmission rate
 exceeding the reception rate in terms of throughput and bandwidth.

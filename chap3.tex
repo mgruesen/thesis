@@ -46,7 +46,7 @@ the number of page faults.
 \end{figure}
 
 The goal of the experiment is to create a virtual ``wire'' between two Ethernet
-ports, such that data recieved by port A is sent by port B, and vice versa. An
+ports, such that data received by port A is sent by port B, and vice versa. An
 example application, L2 Forward, provided in the development kit served as a
 starting point for this experiment. The example creates an \emph{external}
 wire between pairs of ports, where port A sends data to port B, and B sends to
@@ -54,7 +54,7 @@ A. In order to create an \emph{internal} wire, the driver for each port needed
 to be changed. Figure \ref{dpdk_l2} illustrates the behavior models used in the
 experiment. The modified implementation has each port reads from it's
 counterparts receive queue and sends a copy from itself.  The destination
-address fields have to be refactored from being statically hard coded in the
+address fields have to be re-factored from being statically hard coded in the
 port driver to a dynamic, mutable property.
 
 Execution of the modified application gives inconsistent results, and can
@@ -126,8 +126,8 @@ functionality.
 \label{hardware:odp}
 The OpenDataPlane project provides an API for programming network data plane
 applications across multiple platforms. Currently, software implementations
-exist for Linux and DPDK backends as references for design and integration
-purposes. ODP allows for different backends in order to support a broader class
+exist for Linux and DPDK back ends as references for design and integration
+purposes. ODP allows for different back ends in order to support a broader class
 of networking devices. Figure \ref{hardware:odp_overview} shows the possible
 architectural models that can be constructed using ODP.
 
@@ -144,7 +144,7 @@ architectural models that can be constructed using ODP.
     \includegraphics[scale=0.9]{odp_overview_b}
     \caption{ODP and DPDK provide accelerated driver support to applications.}
   \end{subfigure}
-  \caption{ODP can use a variety of backends to create different architectures.}
+  \caption{ODP can use a variety of back ends to create different architectures.}
   \label{hardware:odp_overview}
 \end{figure}
 
