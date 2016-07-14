@@ -237,7 +237,8 @@ dp.add_port(port2);
 // Load a sample application named 'sample.app'.
 dp.load_application("sample.app");
 
-// Set data plane configuration to 'up', starting execution.
+// Set data plane configuration to 'up', 
+// starting execution.
 dp.up();
 \end{lstlisting}
 
@@ -251,7 +252,7 @@ the orchestration of the components utilized in the example driver listing.
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.53]{ff_system}
-\caption{The Virtual Machine System Architecture}
+\caption{The Freeflow virtual switch architecture.}
 \label{ff_system}
 \end{figure}
 
@@ -305,6 +306,8 @@ pipeline, the resulting action list is applied to the packet. Finally the
 context enters the egress stage where the packet is forwarded to the designated
 \emph{output port} set in the context, or dropped.
 
+% The freeflow port impl lies somewhere on the spectrum...
+
 \section{Tables}
 \label{vm:tables}
 In network switches, tables are used to match properties of packets
@@ -341,6 +344,8 @@ set of operations, or instructions, that are applied to packets.
  \label{flow_table}
 \end{table}
 
+% The freeflow table impl lies somewhere on the spectrum...
+
 \section{Instructions}
 \label{vm:insn}
 The FFVM hosts network applications that are dynamically loaded and executed
@@ -350,6 +355,8 @@ target machine code, the execution of instructions provided in the binaries is
 more efficient. These instructions are encapsulated in functions, that can be
 executed on a variety of computational devices. This allows the FFVM to take
 advantage of hardware accelerators tuned for network processing.
+
+% Freeflow insn execution lies somewhere on the spectrum...
 
 \section{Memory}
 \label{vm:memory}
@@ -398,6 +405,8 @@ buffer that can be allocated. During creation, and upon deallocation, a packet
 context buffer is set to a null state; each field in the context is default
 initialized and the packet size is set to 0. In this state, referencing a
 context or the packet buffer it is associated with is undefined.
+
+% The freeflow memory model lies somewhere on the spectrum...
 
 \section{Threading}
 \label{vm:threading}

@@ -115,7 +115,7 @@ The contributions presented in this thesis come from numerous experiments with
 low level networking hardware. These experiments helped characterize the
 problem domain with respect to low level abstraction of network interfaces and
 high level language translation to a native instruction set architecture
-(ISA). The experiments evaluated include:
+(ISA). The culmination of lessons learned are found in the Freeflow virtual machine (FFVM) implementation, the main focus in this work. The experiments evaluated include:
 
 \begin{itemize}
   \item DPDK - Low level port abstractions
@@ -148,38 +148,29 @@ high level language translation to a native instruction set architecture
 % the execution of certain instructions to the most appropriate computational
 % device present and provide access to guaranteed resources.
 
-\section{Road Map}
+\section{Organization}
 \label{intro:map}
-% Write a short paragraph about each topic.
-This paper covers our initial work towards a fully programmable networking
-device. In the following paragraphs, a brief description of each chapter
-highlights the main research topics pursued throughout the development of
-this project.
-
-Related works are contained in the Chapter \ref{related}, detailing some of the
-more mature research efforts in the domain of SDN.
-
-In Chapters \ref{hardware} and \ref{insn}, the early investigations into
+% Related works are contained in the Chapter \ref{related}, detailing some of the
+% more mature research efforts in the domain of SDN, and other overlaping problem
+% domains.
+The thesis is organized as follows. In Chapters \ref{hardware} and \ref{insn}, the early investigations into
 hardware abstraction and processing instructions are discussed,
 respectively. This section journals the different approaches that were
 considered in the design and implementation throughout this project, and
 explains the benefits, deficits, and lessons learned from each approach.
-
 Chapter \ref{ff} covers the design and implementation of the Freeflow system,
 including application hosting, the virtual machine, the runtime support
 library and the application binary interface exposed. This chapter discusses
 the details of the contributions made towards this work at length.
-
 Chapter \ref{expr} presents the experiments conducted as well as some initial
 evaluation metrics collected. These demonstrate basic networking device
 functionality for emulating Ethernet port end-points and cross-connects over
 TCP sockets, and provide a baseline which can be used to further optimize the
 system.
-
 In the final chapter, Chapter \ref{concl}, the conclusions drawn from the
 research conducted are discussed. Future work with respect to lessons learned
 throughout the development of this project and integration with other SDN
-platforms and frameworks is also covered.
+programming languages and frameworks are also covered.
 
-Lastly, Appendix \ref{abi-listing} contains a listing of the ABI provided by
-the Freeflow virtual machine as a reference.
+% Lastly, Appendix \ref{abi-listing} contains a listing of the ABI provided by
+% the Freeflow virtual machine as a reference.

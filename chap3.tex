@@ -62,7 +62,7 @@ require system restarts between runs to reconfigure the virtual machine when
 errors occur. This is attributed to performance and abstraction penalties
 suffered from the use of the virtual machine as the runtime environment host.
 Though DPDK's optimized port drivers deliver solid performance,
-The results show that utilizing this framework for abstracting low level port
+the results show that utilizing this framework for abstracting low level port
 resources would narrow the field of compatible physical devices to target.
 
 \begin{figure}[h!]
@@ -149,7 +149,7 @@ architectural models that can be constructed using ODP.
 \end{figure}
 
 ODP's strive for flexibility and performance is mirrored in the design of the
-FFVM, and support for the framework is being evaluated. The C API exposed gives
+FFVM, and support for the framework is being investigated. The C API exposed gives
 enough user space control over networking interfaces while minimizing the
 performance cost incurred by hardware abstraction. Integration of ODP ports
 into the FFVM port abstraction is currently being evaluated. Figure
@@ -170,13 +170,15 @@ During these three investigations, the design and implementation of the FFVM
 port abstraction evolved. The proper level of abstraction lies just above the
 middle of the virtualization-materialization spectrum, where programmers can
 maintain a high level of control over networking interfaces while utilizing
-optimized operational mechanisms provided in the target system. Figure
-\ref{hardware:spectrum_ffports} plots the current region FFVM ports occupy.
+optimized operational mechanisms provided in the target system. 
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale=0.75]{spectrum_ffports}
-  \caption{The Freeflow VM port abstraction plotted along side the other
-  frameworks investigated.}
-  \label{hardware:spectrum_ffports}
-\end{figure}
+% Figure
+% \ref{hardware:spectrum_ffports} plots the current region FFVM ports occupy.
+
+% \begin{figure}[h!]
+%   \centering
+%   \includegraphics[scale=0.75]{spectrum_ffports}
+%   \caption{The Freeflow VM port abstraction plotted along side the other
+%   frameworks investigated.}
+%   \label{hardware:spectrum_ffports}
+% \end{figure}

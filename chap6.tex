@@ -151,11 +151,13 @@ port_thread_work(){
 }
 
 main(){
-  // Build a server socket that will accept network connections.
+  // Build a server socket that will accept network 
+  // connections.
   Ipv4_socket_address addr(Ipv4_address::any(), 5000);
   Ipv4_stream_socket server(addr);
 
-  // Configure the dataplanes ports before loading applications.
+  // Configure the dataplanes ports before loading 
+  // applications.
   dp.add_port(&ports[0]);
   dp.add_port(&ports[1]);
   dp.load_application("apps/wire.app");
@@ -347,11 +349,11 @@ for all four of the Freeflow wire implementations tested.
    \hline
    STA & 504829 & 504829 & 1.861 & 1.861 \\
    \hline
-   TPP (v1) & 272515 & 121233 & 0.744 & 0.743 \\
+   TPP-1 & 272515 & 121233 & 0.744 & 0.743 \\
    \hline
-   TPP (v2) & 627801 & 627801 & 3.025 & 3.025 \\
+   TPP-2 & 627801 & 627801 & 3.025 & 3.025 \\
    \hline
-   TPP (v3) & 836129 & 950435 & 2.947 & 3.559 \\ [1ex]
+   TPP-3 & 836129 & 950435 & 2.947 & 3.559 \\ [1ex]
    \hline\hline
    Speedup & 1.66 & 1.88 & 1.58 & 1.91 \\ [1ex]
    \hline
@@ -366,3 +368,21 @@ with respect to packet throughput, but that issue was resolved by the use of
 lock-free queue structures in the second version. The final version includes
 more optimizations were implemented and gave way to the transmission rate
 exceeding the reception rate in terms of throughput and bandwidth.
+
+\section{Discussion}
+\label{expr:discussion}
+
+% Why is it slow?
+
+The results found in the previous section show that the FFVM is a bit behind in terms of performance. This can be attributed to numerous factors with the experimental setups in the execution environment. In each experiment run, all of the processes used are executed on the same device. System overhead from the operating system juggling multiple processes does not allow for optimal execution. This is obvious when comparing the results of the endpoint application, as the Flowcap processes are much more light weight and less burdensome on the OS. Adding to this is the reliance on the Linux networking stack when using TCP (stream) sockets provided in the system API.
+
+% Where can we move the FFVM on the spectrum to improve performance?
+
+In order to boost performance in the FFVM, the implementation needs to be further towards the hardware end of the virtualization-materialization spectrum. Translating as much high level code down to native machine code provides the best execution environment for networking applications. For instance, flow tables can be crafted from hardware components, such as TCAMs, and manipulated by application logic. The fewer times the application-run time boundary is crossed, the more efficient the code will be executed. 
+
+% What would that mean for the ABI and portability?
+
+However as we drift further towards a more materialized implementation, we sacrifice portability for performance. This increases the amount of work that must be done by compilers to efficiently generate optimized native machine code. Additional concurrency models could also be supported by a shift towards the lower end of the spectrum, where new and exotic switch architectures sport cutting edge processors and accelerators.
+
+% How does that affect different concurrency models?
+

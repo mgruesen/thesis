@@ -25,7 +25,7 @@ vendors, but typically do not implement a full, general purpose ISA that would
 be present on a CPU. For example, floating point arithmetic is not used in
 network processing and as a result, NPUs do not contain floating point units.
 The hardware is fine tuned for the domain in which it operates in, and the
-machine code needs to reflect that.
+native machine ISA needs to reflect that.
 
 The core of any RISC-V implementation is a base integer ISA that can have many
 optional instruction set ``extensions'' added to it. Outside of the core, each
@@ -92,13 +92,15 @@ execute natively. However the lack of materialized RISC-V processors forces
 less efficient execution environments to be used. In order to achieve optimal
 usage of multiple computing units driven by a single application, the
 instructions executed on a given unit must be translated to the target device's
-native ISA. Figure \ref{spectrum_insn} shows where the different strategies for
-translating high level code to native machine code lie on the spectrum.
+native ISA. 
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale=0.75]{spectrum_insn}
-  \caption{The FFVM processes instructions in native machine code format to
-  ensure efficient execution.}
-  \label{spectrum_insn}
-\end{figure}
+% Figure \ref{spectrum_insn} shows where the different strategies for
+% translating high level code to native machine code lie on the spectrum.
+
+% \begin{figure}[h!]
+%   \centering
+%   \includegraphics[scale=0.75]{spectrum_insn}
+%   \caption{The FFVM processes instructions in native machine code format to
+%   ensure efficient execution.}
+%   \label{spectrum_insn}
+% \end{figure}
