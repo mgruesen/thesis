@@ -1,10 +1,10 @@
 \chapter{RELATED WORK}
 \label{related}
 % The related works section is comprised of the more current projects being
-% developed in the problem domain addressed by the work in this thesis. 
-Many
-approaches to solving the numerous problems SDN brings about exist, yet there
-is a lack of consensus on what is the ``correct'' way. This field of research
+% developed in the problem domain addressed by the work in this thesis.
+Though there are many
+approaches to solving the numerous problems SDN brings about, there
+is a lack of consensus on what the ``correct'' way is. This field of research
 continues to grow, and overlap with other research interests is becoming more
 common. The major sections in this chapter discuss the current SDN solutions,
 heterogeneous computing, and event processing frameworks.
@@ -53,18 +53,20 @@ allows programmers to create highly optimized data plane applications. This
 platform utilizes custom drivers that provide raw access to networking devices
 and computational resources. The system is tuned to natively support Intel
 brand hardware and allows users to create C applications that execute in
-a runtime environment. 
+a runtime environment.
 
 Freeflow's port abstraction resides at a slightly higher level than DPDK to support more networking interfaces, and as such DPDK ports have been integrated into the FFVM.
 
 \subsection{Netmap}
 \label{related:netmap}
-The netmap project \cite{netmap} is comprised of three functional components
-contained in a single kernel module. With the netmap kernel module, user space
+The Netmap project \cite{netmap} is comprised of three functional components
+contained in a single kernel module. With the Netmap kernel module, user space
 applications have access to network interface cards, the host operating system
-networking stack, as well as VALE virtual ports and netmap ``pipes''. 
+networking stack, as well as VALE virtual ports and Netmap ``pipes''.
 
-The broad class of network interfaces that netmap supports is desireable in the FFVM implementation. To compensate for the lack of control provided in the abstraction, netmap ports have been implemented in the Freeflow port abstraction.
+The broad class of network interfaces that Netmap supports is desirable in the
+FFVM implementation. To compensate for the lack of control provided in the
+abstraction, Netmap ports have been implemented in the Freeflow port abstraction.
 
 \subsection{OpenDataPlane}
 \label{related:odp}
@@ -72,9 +74,12 @@ The OpenDataPlane (ODP) project \cite{odp} establishes an open source API for
 defining networking data plane applications. ODP provides application
 portability over numerous networking architectures. Use of hardware
 accelerators can be achieved without burdening the user with a required
-knowledge of the capabilities and features present in an execution environment. 
+knowledge of the capabilities and features present in an execution environment.
 
-ODP and the FFVM lie at roughly the same level with respect to high level language support and low level hardware abstractions. FFVM focuses more on flexibility and programmability with respect to data plane processing, whereas ODP focuses on exposing APIs to interface with other SDN execution environments.
+ODP and the FFVM lie at roughly the same level with respect to high level
+language support and low level hardware abstractions. FFVM focuses more on
+flexibility and programmability with respect to data plane processing, whereas
+ODP focuses on exposing APIs to interface with other SDN execution environments.
 
 \subsection{Open Virtual Switch}
 \label{related:ovs}
@@ -83,14 +88,17 @@ plane applications over an aggregation of switching devices. OVS replaces
 the bridge between hyper-visors running on top of a distributed machine that
 is typically provided by OS kernels. The OVS controller is capable of managing
 pure software and/or hardware switches, and supports the usage of specialized
-hardware accelerators. 
+hardware accelerators.
 
-Freeflow applications can take advantage of the distribution of data plane switch logic by way of the FFVM. Integration with the OVS distributed architecture would mitigate northboud and southbound communication from the hardware to the application, and viceversa.
+Freeflow applications can take advantage of the distribution of data plane
+switch logic by way of the FFVM. Integration with the OVS distributed
+architecture would mitigate northbound and southbound communication from the
+hardware to the application, and vice versa.
 
 \section{Languages}
 \label{related:lang}
 SDN programming languages exemplify the features and capabilities programmers
-want to be supported in an SDN application execution environment. These give
+want to have supported in an SDN application execution environment. These give
 indications of what a suitable execution environment should provide in order
 to support a large number of higher level languages. The following two sections
 describe a couple of the more mature SDN programming languages referenced.
@@ -100,12 +108,16 @@ describe a couple of the more mature SDN programming languages referenced.
 P4 \cite{p4} provides a network programming language for protocol independent
 packet parsers. These parsers are akin to the decoding stages executed in
 Freeflow packet processing pipelines, but executed on dedicated hardware. The
-forwarding model for P4 uses match+action tables (similar to flow tables) to
+forwarding model for P4 uses match+action tables (similar to decision tables) to
 match on ``parsed representations'' (PR) generated by the parsers. A PR is the
 data structure which holds the parsing state, which gives access to protocol
-header fields. 
+header fields.
 
-Given the popularity of the P4 programming language, support is being considered in future implementations of the FFVM. Packet parsing units can be application-specific integrated circuits (ASICs), that are highly optimized for packet decoding operations and are utilizing the P4 language could take advantage of these types of processors available to an FFVM execution environment.
+Given the popularity of the P4 programming language, support is being
+considered in future implementations of the FFVM. Packet parsing units can be
+application-specific integrated circuits (ASICs), that are highly optimized for
+packet decoding operations. Utilizing the P4 language could take
+advantage of these types of processors available to an FFVM execution environment.
 
 \subsection{POF}
 \label{related:pof}
@@ -113,7 +125,7 @@ Protocol Oblivious Forwarding (POF) \cite{pof} defines a small ISA that can
 be executed on POF SDN switches. The POF model represents a packet processing
 pipeline as a series of matching tables that perform packet header decoding
 when invoked. The decoded header fields are stored in meta data as an offset
-and length pair, referred to as ``search keys''. 
+and length pair, referred to as ``search keys''.
 
 This storage strategy is
 similar to the FFVM context binding environment. Referencing field values as pairs of header offsets and lengths provides more efficient memory usage in the environment.
@@ -129,14 +141,18 @@ hardware components, such as encryption, checksums, and even packet header
 processors. Below is a listing of the relevant projects in this domain that
 were studied during the design and implementation of the Freeflow system.
 
-\subsection{Heterogeneous System Architecture}
+\subsection{HSA}
 \label{related:hsa}
-Or HSA \cite{hsa}, provides a specification for creating a heterogeneous
+HSA \cite{hsa} provides a specification for creating a heterogeneous
 system architecture that supports the execution of applications across a
 variety of computational resources. Interfacing with these different computing
-devices requires knowledge of each devices memory model and execution
-semantics, and in order to program against them the system must provide a
-uniform view that each device conforms to. Many of the core components defined in the HSA specification were considered during the implementation of the FFVM. Unified views of memory and time as well as concurrent thread communication attempt to follow this model to orchestrate multiple compuational devices or computing cores.
+devices requires knowledge of each device's memory model and execution
+semantics. In order to program against them the system must provide a
+uniform view that each device conforms to. Many of the core components defined
+in the HSA specification were considered during the implementation of the FFVM.
+ Unified views of memory and time as well as concurrent thread communication
+ attempt to follow this model to orchestrate multiple computational devices or
+ computing cores.
 
 \subsection{CUDA}
 \label{related:cuda}
@@ -153,9 +169,12 @@ to the device's native machine code by way of an intermediate representation
 Machine (LLVM) IR used by the Clang compiler. Once the code has been lowered
 to the NVVM IR it can be translated to the parallel thread execution virtual
 machine and ISA, PTX. These instructions are executed natively by any CUDA
-enabled GPU device. 
+enabled GPU device.
 
-The narrowed view of CUDA with respect to heterogeneous computing is similar to the FFVM design in that a specialized hardware components that posses different capabilities, features, and instruction sets need to be considered during compilation.
+The narrowed view of CUDA with respect to heterogeneous computing is similar to
+the FFVM design in that specialized hardware components that posses different
+capabilities, features, and instruction sets need to be considered during
+compilation.
 
 \subsection{Open Compute Language}
 \label{related:ocl}
@@ -165,15 +184,17 @@ personal computers, servers, and systems-on-a-chip (SOCs). The Standard
 Portable IR (SPIR), based on LLVM IR, was evolved into a similarly open and
 cross-platform language called SPIR-V. This IR utilizes LLVM as the target
 device, and allows for device specific code to be generated from a single
-application source. 
+application source.
 
 OpenCL focuses on the more general problem discussed in
-the previous topic, supporting a larger class of computational devices. FFVM is similiar to OpenCL in attempting to solve the general problem of managing and optimizing the usage of different computing resources on a single system.
+the previous topic, supporting a larger class of computational devices. FFVM is
+similar to OpenCL in attempting to solve the general problem of managing and
+optimizing the usage of different computing resources on a single system.
 
 \subsection{NetASM}
 \label{related:netasm}
-The customized networking assembly language, NetASM \cite{netasm}, defines an
-instruction set architecture (ISA) that tuned directly towards networking
+The customized networking assembly language NetASM \cite{netasm} defines an
+instruction set architecture (ISA) that is tuned specifically for networking
 programming. Instructions for modifying packet headers and state as well
 as table and specialized operations are natively supported. In addition to the
 networking oriented instructions the set also contains basic logical,
@@ -181,7 +202,13 @@ arithmetic, and control-flow operations. Applications written in NetASM can
 model the execution environment as either a traditional Turing complete
 register machine or an extended abstract machine developed by the authors.
 
-The NetASM ISA approaches the problem of processing instructions natively in an execution environment at the machine level. We had considered this approach, explained in Chapter \ref{insn}, but abandoned the cause as re-implementing basic arithmetic, logical, and control flow operations to be interpreted at run time would negatively impact performance. In essence, the solution implements the MIPS ISA with some additional specialized network programming instructions.
+The NetASM ISA approaches the problem of processing instructions natively in an
+execution environment at the machine level. We had considered this approach,
+as explained in Chapter \ref{insn}, but abandoned it as re-implementing
+basic arithmetic, logical, and control flow operations to be interpreted at
+run time would negatively impact performance. In essence, the solution
+implements the MIPS ISA with some additional specialized network programming
+instructions.
 
 \subsection{RISC V}
 \label{related:riscv}
@@ -193,11 +220,16 @@ also provided. RISC-V instruction execution requires the usage of RISC-V CPUs,
 currently provided through an ISA simulator (Spike), or a VM running a modified
 Linux kernel.
 
-An extensible ISA that provides basic ALU operations as a core instruction set that is added to is a more fitting choice for implementing a network programming ISA. However, lack of support for executing RISC-V instructions in commericial processors prevents the approach from being embraced. FFVM instructions need to be executed on physical hardware in a native machine code, which is not currently possible with this ISA.
+An extensible ISA that provides basic ALU operations as a core instruction set
+that is added to is a more fitting choice for implementing a network programming
+ISA. However, lack of support for executing RISC-V instructions in commercial
+processors prevents the approach from being embraced. FFVM instructions need to
+be executed on physical hardware in a native machine code, which is not
+currently possible with this ISA.
 
 \section{Event Processing Frameworks}
 \label{related:event}
-One of the goals in SDN is to make networks more reactive, more intelligent.
+One of the goals in SDN is to make networks more reactive, and intelligent.
 Event processing frameworks provide many of the mechanisms required to implement
 typical networking application behavior. The following sections describe two
 processing frameworks considered, but the project has not reached the state
@@ -205,7 +237,7 @@ of maturity where either can be integrated.
 
 \subsection{Seastar}
 \label{related:seastar}
-The Seastar project \cite{seastar}, is an open source C++ framework that
+The Seastar project \cite{seastar} is an open source C++ framework that
 optimizes applications for modern architectural features supported in many high
 performance, highly parallel servers. These features include the use of different
 networking stacks, modern language features for concurrent programming, and low
@@ -214,7 +246,13 @@ these features lets the framework host powerful event driven applications.
 Support for Seastar warrants high end hardware that can make full use of the
 framework and was deemed too exotic to integrate at this time.
 
-Seastar's high perfomance execution is enabled by the usage of many computational and memory resources, rarely found in commercial hardware. In its current state, the FFVM has not yet reached the state of maturity to utilize this exotic event processing framework. Enterprise servers possess and abundance of processors and memory, and would be required to host Seastar applications. During consideration, compilation of the Seastar framework was unsuccessful due to the lack of hardware resources available in the testing hardware.
+Seastar's high performance execution is enabled by the use of many computational
+and memory resources, rarely found in commercial hardware. In its current state,
+the FFVM is not yet mature enough to utilize this exotic event
+processing framework. Enterprise servers possess an abundance of processors and
+memory, and would be required to host Seastar applications. During consideration,
+compilation of the Seastar framework was unsuccessful due to the lack of 
+resources available in the testing hardware.
 
 \subsection{Libevent}
 \label{related:libevent}
@@ -226,4 +264,4 @@ applications to be highly portable and efficient. The dependency on file
 descriptors makes supporting port objects that are not socket based difficult
 and inefficient.
 
-Integrating the libevent API with networking interfaces 
+Integrating the libevent API with networking interfaces

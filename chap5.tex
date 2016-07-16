@@ -4,14 +4,13 @@ The Freeflow project aims to bridge the gap between high level network
 programming languages and low level networking hardware by defining an ideal
 execution environment for network applications. Evaluating the benefits and
 deficits with respect to flexibility and performance provides a more accurate
-level of virtualization or materialization to utilize. In Figure \ref{ff_arch}
+level of translation or abstraction to use. In Figure \ref{ff_arch}
 the Freeflow system architecture is illustrated.
 
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.5]{ff_arch}
-\caption{Network application computational and memory resources are provided
-by the FFVM.}
+\caption{FFVM provides computational and memory resources to applications.}
 \label{ff_arch}
 \end{figure}
 
@@ -55,13 +54,13 @@ able to be pushed into the appropriate hardware and executed efficiently.
 \centering
 \includegraphics[scale=0.5]{application}
 \caption{Freeflow application logic spans across the control and data plane
-boundaries.}
+boundary.}
 \label{app}
 \end{figure}
 
 Networking applications operate on packets, utilizing information found inside
 of nested protocol headers to determine the appropriate action to take. In
-Freeflow applications and the virtual machine operate on packet contexts,
+Freeflow, applications and the virtual machine operate on packet contexts
 that store contextual information about a packet in the system. Applications
 use these contexts to process packets in a series of stages that extract
 protocol information and apply rule matching logic to them. A typical
@@ -93,8 +92,8 @@ to the host data plane in order to provide dynamic allocation of resources.
 These functions are:
 
 \begin{lstlisting}
-ff_load(dp);
-ff_unload(dp);
+    ff_load(dp);
+    ff_unload(dp);
 \end{lstlisting}
 
 The \texttt{ff\_load} function initializes global data plane resources required
@@ -104,8 +103,8 @@ FFVM tear down, a call to \texttt{ff\_unload} will release the allocated
 resources if the application is not in a ``running'' state.
 
 \begin{lstlisting}
-ff_start(dp);
-ff_stop(dp);
+    ff_start(dp);
+    ff_stop(dp);
 \end{lstlisting}
 
 Applications ``learn'' about state and configuration changes to the data plane
@@ -116,7 +115,7 @@ is ``ready'' or ``stopped''. The \texttt{ff\_stop} function halts packet
 processing, disables event handlers, and sets the state to ``stopped''.
 
 \begin{lstlisting}
-ff_process(cxt);
+    ff_process(cxt);
 \end{lstlisting}
 
 The application defines the forwarding behavior for a data plane by providing
@@ -136,7 +135,7 @@ in a context allows the data plane to provide robust network functionality
 and execute a variety of network applications.
 
 \subsection{Packets}
-In networking, packets represent raw data that has been transmitted over some
+In networking, packets represent raw data that have been transmitted over some
 media with protocol headers for each layer contained in the packet. Each header
 gives information about the structure and state of the current protocol being
 processed. Figure \ref{ipv4_eth_frame} shows an example Ethernet frame
@@ -162,8 +161,9 @@ environment}, discussed in the following section.
 
 \subsection{Context}
 The packet \emph{context} provides contextual information about an associated
-packet in the system. This is where applications store input, control, and
-decoder information, as well as application meta data and build action lists.
+packet in the system. A context is where applications store input, control, and
+decoder information, as well as application meta data. This is also where they
+build action lists.
 Input information consists of data about the packets arrival into the system,
 such as the input logical and physical ports. The control information maintains
 the control flow of a context as it traverses processing pipelines.
@@ -216,7 +216,7 @@ are explained further in Section \ref{vm:insn}.
 The Freeflow Virtual Machine is composed of modular parts that a programmer can
 assemble into a virtual switch. This flexibility allows for the instantiation
 of numerous switches with varying features and capabilities. In general,
-switches require control and data planes as well as a compiled network
+switches require control and data planes as well as compiled network
 applications to drive each component. A FFVM virtual switch can be assembled
 by creating a data plane instance, in which port resources are added and an
 application is loaded. User space drivers provision the machine with these
@@ -224,8 +224,8 @@ components and execute compiled applications. An example driver is shown in the
 following listing.
 
 \begin{lstlisting}
-// Create a data plane instance named 'dp1'.
-ff::dataplane dp = "dp1";
+// Create a data plane instance named `dp1'.
+ff::dataplane dp = ``dp1";
 
 // Add virtual (internal) ports and two TCP sockets.
 dp.add_virtual_ports();
@@ -234,16 +234,16 @@ ff::Port* port2 = new ff::Port_tcp(2);
 dp.add_port(port1);
 dp.add_port(port2);
 
-// Load a sample application named 'sample.app'.
-dp.load_application("sample.app");
+// Load a sample application named `sample.app'.
+dp.load_application(``sample.app");
 
-// Set data plane configuration to 'up', 
+// Set data plane configuration to `up',
 // starting execution.
 dp.up();
 \end{lstlisting}
 
 The driver makes a virtual switch with a single data plane, named ``dp1'', that
-contains the predefined virtual ports and two TCP ports, with ids 1 and 2
+contains the predefined virtual ports and two TCP ports, with i.d.s 1 and 2
 respectively. After allocating port resources, an application named
 ``sample.app'' is loaded, allowing the system to perform table configuration
 and import the pipeline processing symbols. Figure \ref{ff_system} illustrates
@@ -270,11 +270,11 @@ needs only implement the following four functions:
 \item Down - Disables port functionality.
 \end{itemize}
 
-Port objects can be classified as being either physical, logical, or virtual. A
+Port objects can be classified as being physical, logical, or virtual. A
 physical port represents a hardware networking interface, e.g. Ethernet cards.
 Logical ports represent software networking constructs that utilize file
-descriptors to act as a endpoint for communication. An illustration of the port
-object UML can be found in figure \ref{port_uml}. Virtual ports are derived
+descriptors to act as an endpoint for communication. An illustration of the port
+object UML can be found in Figure \ref{port_uml}. Virtual ports are derived
 from logical ports, and provide specialized functionality for the system. To
 further classify the port type, they can be either seen as an \emph{input}
 port, where data from an external source can be ingressed into the system, or an
@@ -285,12 +285,12 @@ can be any port type (i.e. logical, physical, virtual).
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.85]{ff_port_uml}
-\caption{Freeflow port uml diagram.}
+\caption{Freeflow port UML diagram.}
 \label{port_uml}
 \end{figure}
 
 When packets are received by a port object, the memory that holds the raw
-packet data and the context are allocated during this \emph{ingress} phase. The
+packet data and the context are allocated during the \emph{ingress} phase. The
 underlying data store for the packet and context are owned and managed by the
 port itself. Memory can be allocated from the ports internal resources (i.e.
 memory mapped from a physical device address space) if present, or by the FFVM's
@@ -298,7 +298,7 @@ global buffer pool. This gives a greater amount of flexibility in that the
 packet and context can exist in same memory region, potentially improving
 locality. As packets leave the system during the \emph{egress} phase, this
 memory is released back to the appropriate devices. Details about memory
-management can be found in section \ref{vm:memory}.
+management can be found in Section \ref{vm:memory}.
 
 After initializing a context with a new packet, the port passes the context to
 the application pipeline for processing. When the context exits the application
@@ -317,13 +317,15 @@ as \emph{exact}, \emph{prefix}, or \emph{wild card}. All three table types are
 currently implemented by the FFVM, though support for prefix and wild card is
 incomplete.
 
-Each entry in a flow table contains a \emph{key}, that is compared to a
-certain field within packet. Key types vary between match table types. For an
+Each entry in a flow table contains a \emph{key} that is compared to a
+certain field within the packet. Key types vary between match table types. For an
 exact match table the keys are integers of a set width, defined by the
 application. These keys are used to aggregate traffic containing similar
 characteristics into flows. Flows can be viewed as programs, or functions,
-that get executed when a packet matches that their key. Each flow defines a
-set of operations, or instructions, that are applied to packets.
+that get executed when a packet matches their key. Each flow defines a
+set of operations, or instructions, that are applied to packets. Table
+\ref{flow_table} depicts a simple flow table that creates a virtual ``wire''
+between two ports, where traffic received by one port is sent out the other.
 
 \begin{table}[h]
   \centering
@@ -338,9 +340,7 @@ set of operations, or instructions, that are applied to packets.
    miss & drop; \\ [1ex]
    \hline
  \end{tabular}
- \caption{A flow table using a context's input port as the key to create a
- virtual ``wire'' between two ports, where traffic received from one port is
- sent out the other.}
+ \caption{A flow table that maps input ports to output ports.}
  \label{flow_table}
 \end{table}
 
@@ -352,7 +352,7 @@ The FFVM hosts network applications that are dynamically loaded and executed
 at run time. To avoid using an interpreter, applications must be compiled
 to native shared objects. By translating the high level language down to the
 target machine code, the execution of instructions provided in the binaries is
-more efficient. These instructions are encapsulated in functions, that can be
+more efficient. These instructions are encapsulated in functions that can be
 executed on a variety of computational devices. This allows the FFVM to take
 advantage of hardware accelerators tuned for network processing.
 
@@ -364,11 +364,11 @@ Memory for raw packet data and contexts is allocated by port objects during the
 ingress processing phase. The FFVM is optimized to allow for zero-copy packet
 processing, where raw packet data resides in a physical device's dedicated
 memory. In certain cases device packet buffers contain extra memory for user
-data, which can store the context object as well to improve locality. Another
+data, which can store the context object to improve locality. Another
 benefit of storing the packet and context in the same region of memory is that
 the two entities can grow dynamically; the context grows as actions are appended
 to it's action list and the packet grows when new protocol headers are pushed
-onto a header binding environment. When a port object does not posses the
+onto a header binding environment. When a port object does not possess the
 capability to provide persistent packet memory, a global packet context buffer
 can be allocated by the system. Figure \ref{mem_model} illustrates the two
 memory models currently supported by the FFVM.
@@ -393,15 +393,15 @@ memory models currently supported by the FFVM.
 \end{figure}
 
 A global buffer consists of a packet buffer, a context, and a non-zero
-id. Packet buffers are preallocated 2048 byte regions that can easily
+i.d. Packet buffers are pre-allocated 2048 byte regions that can easily
 accommodate IEEE 802.3 Ethernet frames that have a maximum size of 1523 bytes.
 The packet buffers are over sized to allow for the insertion of new protocol
 headers that may result during or after pipeline processing. Contexts residing
 in a global buffer contain a reference to the packet buffer, which by default
-points to a FFVM packet buffer. The id gives the offset into the global buffer
-pool, and allows ports to return the id back to the pool's free list. FFVM's
+points to a FFVM packet buffer. The i.d. gives the offset into the global buffer
+pool, and allows ports to return the i.d. back to the pool's free list. FFVM's
 free list is implemented as a min-heap, providing the next available packet
-buffer that can be allocated. During creation, and upon deallocation, a packet
+buffer that can be allocated. During creation, and upon de-allocation, a packet
 context buffer is set to a null state; each field in the context is default
 initialized and the packet size is set to 0. In this state, referencing a
 context or the packet buffer it is associated with is undefined.
@@ -417,9 +417,9 @@ executed in its own thread. Threads contribute to the modular nature of the
 FFVM and can be treated as building blocks to produce different execution
 models. FFVM provides a simple threading interface built on the POSIX thread
 library (pthread) \cite{pthread}, that executes a preallocated work routine
-and passes the thread id as the argument. Synchronization mechanisms and
+and passes the thread i.d. as the argument. Synchronization mechanisms and
 configuration settings, or attributes, are optionally provided. The following
-listing shows how a FFVM thread can be constructed with an initial id and work
+listing shows how a FFVM thread can be constructed with an initial i.d. and work
 routine, and also re-assigned while the thread is not in a ``running'' state.
 
 \begin{lstlisting}
@@ -458,8 +458,8 @@ calls'' allow hosted applications to request system resources. In this section
 the more pertinent functions are discussed.
 
 \begin{lstlisting}
-ff_create_table(dp, width, n, type);
-ff_delete_table(dp, tbl);
+    ff_create_table(dp, width, n, type);
+    ff_delete_table(dp, tbl);
 \end{lstlisting}
 
 A call to the \texttt{ff\_create\_table} function returns a newly allocated
@@ -469,9 +469,9 @@ matching table \emph{type}. The \texttt{ff\_delete\_table} call releases the
 resources allocated in the given table \emph{tbl}.
 
 \begin{lstlisting}
-ff_lookup_flow(tbl, k);
-ff_insert_flow(tbl, k, f);
-ff_remove_flow(tbl, k);
+    ff_lookup_flow(tbl, k);
+    ff_insert_flow(tbl, k, f);
+    ff_remove_flow(tbl, k);
 \end{lstlisting}
 
 Flow entry matching is executed with a call to \texttt{ff\_lookup\_flow} which
@@ -483,8 +483,8 @@ to insert is made, the associated flow object is updated, whereas a call to
 remove a non-existent key from a table has no effect.
 
 \begin{lstlisting}
-ff_output(cxt, p);
-ff_drop(cxt);
+    ff_output(cxt, p);
+    ff_drop(cxt);
 \end{lstlisting}
 
 The \texttt{ff\_output} function sets the \emph{output\_port} field in a context
@@ -492,3 +492,7 @@ The \texttt{ff\_output} function sets the \emph{output\_port} field in a context
 function effectively sets the \emph{output\_port} field in the context \emph{cxt}
 to the data plane drop port id, but terminates the further processing in the
 pipeline stage it was invoked from.
+
+\section{Conclusion}
+\label{ff:concl}
+Conclusion....

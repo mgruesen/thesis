@@ -1,14 +1,14 @@
 \chapter{EARLY INVESTIGATION: HARDWARE ABSTRACTION}
 \label{hardware}
-The initial research for this thesis into the domain of SDN was based around
+The initial research for this thesis into the domain of SDN was based on
 the utilization of frameworks that provide low level access to networking
 resources. In order to maintain high performance and control in user level
 application space, these devices need to be abstracted. Network interfaces,
 both logical and physical, can expose a variety of capabilities and features
 that need to be properly encapsulated. This chapter discusses the evaluation of
-low level port abstractions provided by DPDK, Section \ref{hardware:dpdk}, and
-Netmap, Section \ref{hardware:netmap}, mid-level port abstractions implemented
-in ODP, Section \ref{hardware:odp}, as well as the conclusions drawn in Section
+low level port abstractions provided by DPDK (Section \ref{hardware:dpdk}) and
+Netmap (Section \ref{hardware:netmap}) mid-level port abstractions implemented
+in ODP (Section \ref{hardware:odp}) as well as the conclusions drawn in Section
 \ref{hardware:concl}.
 
 \section{DPDK}
@@ -31,15 +31,13 @@ the number of page faults.
   \begin{subfigure}[b]{0.48\textwidth}
     \centering
     \includegraphics[scale=0.9]{dpdk_l2_a}
-    \caption{DPDK provided forwarding behavior, where a pair of ports sends
-    data to and receives from the other.}
+    \caption{A pair of ports sends data to and receives from the other.}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.48\textwidth}
     \centering
     \includegraphics[scale=0.9]{dpdk_l2_b}
-    \caption{Modified forwarding behavior, where a pair of ports sends the data
-    received by the other.}
+    \caption{A pair of ports sends the data received by the other.}
   \end{subfigure}
   \caption{DPDK L2 forwarding models.}
   \label{dpdk_l2}
@@ -52,8 +50,8 @@ starting point for this experiment. The example creates an \emph{external}
 wire between pairs of ports, where port A sends data to port B, and B sends to
 A. In order to create an \emph{internal} wire, the driver for each port needed
 to be changed. Figure \ref{dpdk_l2} illustrates the behavior models used in the
-experiment. The modified implementation has each port reads from it's
-counterparts receive queue and sends a copy from itself.  The destination
+experiment. The modified implementation has each port reading from it's
+counterpart's receive queue and sending a copy from itself.  The destination
 address fields have to be re-factored from being statically hard coded in the
 port driver to a dynamic, mutable property.
 
@@ -75,37 +73,34 @@ resources would narrow the field of compatible physical devices to target.
 
 \section{Netmap}
 \label{hardware:netmap}
-The second framework evaluated for port abstraction comes from the netmap
+The second framework evaluated for port abstraction comes from the Netmap
 project. Netmap provides low level access to network interfaces by diverting
 the flow of data to and from the interface away from the operating system, and
 towards a custom device. Receive and transmit queues are mapped into user space
 where the raw data can be operated on directly rather than through the operating
 system network stack. Figure \ref{hardware:netmap_overview} illustrates the
-mechanism provided by netmap.
+mechanism provided by Netmap.
 
 \begin{figure}[h!]
   \centering
   \begin{subfigure}[b]{0.48\textwidth}
     \centering
     \includegraphics[scale=0.9]{netmap_overview_a}
-    \caption{User space applications using the kernel to access resources
-    creates coherency issues.}
+    \caption{User space applications use the kernel to access resources.}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.48\textwidth}
     \centering
     \includegraphics[scale=0.9]{netmap_overview_b}
-    \caption{Netmap gives direct access to hardware memory resources in user
-    space.}
+    \caption{Netmap gives direct access to hardware memory resources.}
   \end{subfigure}
-  \caption{Netmap provides an alternative way to access network interface
-  resources, namely the transmit and receive queues.}
+  \caption{Netmap patches the kernel to access network interface resources.}
   \label{hardware:netmap_overview}
 \end{figure}
 
-The portability factor makes netmap a great candidate for a low level port
+The portability factor makes Netmap a great candidate for a low level port
 abstraction framework, supporting hardware NIC, logical (e.g. UDP, TCP,
-UNIX sockets), and virtual (provided by the netmap VALE software switch) ports.
+UNIX sockets), and virtual (provided by the Netmap VALE software switch) ports.
 Moving the memory address space for a network device into user space eliminates
 the need for coherency resolution through the operating system kernel, and gives
 an increase in performance while processing raw packet data. However there is a
@@ -117,8 +112,7 @@ functionality.
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.75]{spectrum_netmap}
-  \caption{Netmap's port abstraction is more portable, but lacks low level
-  control mechanisms.}
+  \caption{Netmap ports are more portable, but lack low level control.}
   \label{hardware:spectrum_netmap}
 \end{figure}
 
@@ -148,7 +142,7 @@ architectural models that can be constructed using ODP.
   \label{hardware:odp_overview}
 \end{figure}
 
-ODP's strive for flexibility and performance is mirrored in the design of the
+ODP's aim to provide flexibility and performance is mirrored in the design of the
 FFVM, and support for the framework is being investigated. The C API exposed gives
 enough user space control over networking interfaces while minimizing the
 performance cost incurred by hardware abstraction. Integration of ODP ports
@@ -170,7 +164,7 @@ During these three investigations, the design and implementation of the FFVM
 port abstraction evolved. The proper level of abstraction lies just above the
 middle of the virtualization-materialization spectrum, where programmers can
 maintain a high level of control over networking interfaces while utilizing
-optimized operational mechanisms provided in the target system. 
+optimized operational mechanisms provided in the target system.
 
 % Figure
 % \ref{hardware:spectrum_ffports} plots the current region FFVM ports occupy.

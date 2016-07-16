@@ -4,9 +4,9 @@
 This thesis presents a series of experiments searching to define an ideal
 execution environment for Software Defined Networking (SDN) applications. By
 exploring the different implementation methods utilized in the domain of SDN,
-namely pure software and hardware, the benefits and deficits of each be
-evaluated and contribute towards a concrete specification. In a pure software
-implementation, most all of the underlying hardware components have been
+namely pure software and hardware, the benefits and deficits of each can be
+evaluated and contribute to a concrete specification. In a pure software
+implementation, most of the underlying hardware components have been
 abstracted, providing more flexibility and compatibility at the cost of
 performance. A pure hardware implementation will translate a high level
 language into optimized native instructions to keep performance high, but
@@ -16,15 +16,13 @@ for these two methods is shown.
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.75]{spectrum_base}
-\caption{Execution environments for SDN applications can utilize a high level
-and low level implementation methods. The sweet spot lies somewhere between
-the two.}
+\caption{Spectrum of execution environment implementation approaches.}
 \label{overview}
 \end{figure}
 
 To translate high level code to a target device's native instruction set, more
 work has to be done by the compiler to support both the language and the
-device. Knowledge of the targets architecture, including specialized hardware
+device. Knowledge of the target's architecture, including specialized hardware
 accelerators, must be well defined in order optimize execution. However this
 approach is not always ideal, especially in the domain of SDN where network
 switch architecture varies greatly between vendors in terms of capabilities
@@ -38,7 +36,7 @@ resource interfaces raised from the hardware.
 
 \section{Background}
 \label{intro:bg}
-Networking architecture has become the focus of many facets in computing with
+Networking architecture has become the focus of many facets of computing with
 an increased reliance on network data. As more and more devices become
 connected and users produce and consume data at an ever-increasing rate, the
 way we accommodate these needs in networking infrastructure has prompted the
@@ -48,7 +46,9 @@ routing. Their networks need to be more intelligent, and allow for more
 powerful user generated network applications. Unfortunately conventional
 network switching devices are fairly static and rigid, and do not provide the
 means to network engineers to create custom applications that suit their
-particular needs. A network switch is composed of two high level components, a
+particular needs.
+
+A network switch is composed of two high level components, a
 control plane and a forwarding, or data, plane. The control plane manages the
 configuration and state of the device, as well as compiled application
 tenancy; whereas the data plane is responsible for executing forwarding
@@ -64,7 +64,7 @@ applications can only occur when the system is starting up. This has much to
 do with the fact that the applications running on these devices are created by
 the vendors themselves, who understand the underlying architecture in the
 system and are able to push the application logic down into the hardware. The
-result is high performance networking applications, that utilize hardware
+result is high performance networking applications that utilize hardware
 accelerators and are tuned for that particular system. However this comes at a
 great cost, flexibility. Network engineers are at the mercy of networking
 device manufacturers when they want to mold their network to suit their needs.
@@ -91,7 +91,7 @@ platforms and network processor architectures. Optimization support for
 specialized instruction execution and offloading computation to hardware
 accelerators and/or co-processors is also a key requirement to keep
 performance on par. Languages are able to interact with the virtual machine
-through an application binary interface (ABI), that defines symbols and rules
+through an application binary interface (ABI) that defines symbols and rules
 that dictate how they can utilize the runtime system. This approach has
 produced an instance of an abstract machine that provides the necessary
 resources and capabilities required to support network application execution.
@@ -115,7 +115,9 @@ The contributions presented in this thesis come from numerous experiments with
 low level networking hardware. These experiments helped characterize the
 problem domain with respect to low level abstraction of network interfaces and
 high level language translation to a native instruction set architecture
-(ISA). The culmination of lessons learned are found in the Freeflow virtual machine (FFVM) implementation, the main focus in this work. The experiments evaluated include:
+(ISA). The culmination of lessons learned are found in the Freeflow virtual
+machine (FFVM) implementation, the main focus in this work. The experiments
+evaluated include:
 
 \begin{itemize}
   \item DPDK - Low level port abstractions
@@ -153,14 +155,15 @@ high level language translation to a native instruction set architecture
 % Related works are contained in the Chapter \ref{related}, detailing some of the
 % more mature research efforts in the domain of SDN, and other overlaping problem
 % domains.
-The thesis is organized as follows. In Chapters \ref{hardware} and \ref{insn}, the early investigations into
+The thesis is organized as follows. In Chapters \ref{hardware} and \ref{insn},
+the early investigations into
 hardware abstraction and processing instructions are discussed,
 respectively. This section journals the different approaches that were
 considered in the design and implementation throughout this project, and
 explains the benefits, deficits, and lessons learned from each approach.
 Chapter \ref{ff} covers the design and implementation of the Freeflow system,
 including application hosting, the virtual machine, the runtime support
-library and the application binary interface exposed. This chapter discusses
+library and the application binary interface. This chapter discusses
 the details of the contributions made towards this work at length.
 Chapter \ref{expr} presents the experiments conducted as well as some initial
 evaluation metrics collected. These demonstrate basic networking device
