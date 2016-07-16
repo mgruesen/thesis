@@ -55,14 +55,18 @@ and computational resources. The system is tuned to natively support Intel
 brand hardware and allows users to create C applications that execute in
 a runtime environment.
 
-Freeflow's port abstraction resides at a slightly higher level than DPDK to support more networking interfaces, and as such DPDK ports have been integrated into the FFVM.
+Freeflow's port abstraction resides at a slightly higher level than DPDK to
+support more networking interfaces, and as such DPDK ports have been integrated
+into the FFVM.
 
 \subsection{Netmap}
 \label{related:netmap}
 The Netmap project \cite{netmap} is comprised of three functional components
 contained in a single kernel module. With the Netmap kernel module, user space
 applications have access to network interface cards, the host operating system
-networking stack, as well as VALE virtual ports and Netmap ``pipes''.
+networking stack, as well as VALE virtual ports and Netmap ``pipes''. VALE is
+the Netmap implementation of a software Ethernet controller that can instantiate
+virtual ports accessible through the Netmap API.
 
 The broad class of network interfaces that Netmap supports is desirable in the
 FFVM implementation. To compensate for the lack of control provided in the
@@ -251,7 +255,7 @@ and memory resources, rarely found in commercial hardware. In its current state,
 the FFVM is not yet mature enough to utilize this exotic event
 processing framework. Enterprise servers possess an abundance of processors and
 memory, and would be required to host Seastar applications. During consideration,
-compilation of the Seastar framework was unsuccessful due to the lack of 
+compilation of the Seastar framework was unsuccessful due to the lack of
 resources available in the testing hardware.
 
 \subsection{Libevent}
@@ -260,8 +264,13 @@ Libevent \cite{libevent} exposes an API for executing function callbacks
 triggered by file descriptor, signal, and timeout events to simplify the
 development of event driven network server applications. Supporting numerous
 polling mechanisms on different platforms (Linux, Mac, Windows) allows
-applications to be highly portable and efficient. The dependency on file
-descriptors makes supporting port objects that are not socket based difficult
-and inefficient.
+applications to be highly portable and efficient.
 
-Integrating the libevent API with networking interfaces
+Integration of the libevent framework was considered but ruled out due to the
+dependency on file descriptors. For logical based ports (sockets) this is
+not an issue. However in the case of other network interfaces that do not
+rely on file descriptors, accommodation becomes difficult. The ability to
+create delegate functions to handle event call backs would be a great addition
+to Freeflow. A mechanism to bridge the gap between the dependency of the
+framework and the Freeflow port abstraction goals could be developed in the
+future to use libevent.

@@ -85,7 +85,7 @@ Ipv4_stream_socket server(addr);
 Port_eth_tcp port1(1);
 Port_eth_tcp port2(2);
 
-// Configure the dataplanes ports before loading
+// Configure the dataplane ports before loading
 // applications.
 ff::Dataplane dp = "dp1";
 dp.add_port(&port1);
