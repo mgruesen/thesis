@@ -131,8 +131,9 @@ pipeline as a series of matching tables that perform packet header decoding
 when invoked. The decoded header fields are stored in meta data as an offset
 and length pair, referred to as ``search keys''.
 
-This storage strategy is
-similar to the FFVM context binding environment. Referencing field values as pairs of header offsets and lengths provides more efficient memory usage in the environment.
+The pipeline composition and storage strategies are similar to the FFVM application
+pipeline and context binding environment, respectively. Integrating POF has
+been a consideration for the project to broaden the set of supported languages.
 
 \section{Heterogeneous Computing}
 \label{related:hcp}

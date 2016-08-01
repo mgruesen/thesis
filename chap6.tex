@@ -187,7 +187,7 @@ greatly with the use of lock-free queues, yet there were still issues with
 memory usage. Each port creates a local context and pushes a copy into the
 send queue for the output port, and context is then copied again before being
 sent from the designated output port. This warranted the need for a reusable
-object pool, where contexts and packet data would reside in a preallocated
+object pool, where contexts and packet data would reside in a pre-allocated
 system buffer. Rather than copying the context to and from the send queues, the
 buffer i.d. is enqueued. Ports are able to access the context and packet through
 the buffer pool using the buffer i.d. as the offset into the pool's underlying
