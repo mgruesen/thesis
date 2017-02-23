@@ -6,5 +6,7 @@ Texlive, or something similar to typeset latex into pdfs.
 
 ## Build
 Pull down a local copy
+
 `make`
+
 Open `main.pdf` with your favorite pdf viewer
