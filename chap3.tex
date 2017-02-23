@@ -31,15 +31,15 @@ the number of page faults.
   \begin{subfigure}[b]{0.48\textwidth}
     \centering
     \includegraphics[scale=0.9]{dpdk_l2_a}
-    \caption{A pair of ports sends data to and receives from the other.}
+    \caption{Default L2 forwarding behavior.}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.48\textwidth}
     \centering
     \includegraphics[scale=0.9]{dpdk_l2_b}
-    \caption{A pair of ports sends the data received by the other.}
+    \caption{Modified L2 forwarding behavior.}
   \end{subfigure}
-  \caption{DPDK L2 forwarding models.}
+  \caption{DPDK L2 forwarding driver.}
   \label{dpdk_l2}
 \end{figure}
 
@@ -66,8 +66,7 @@ resources would narrow the field of compatible physical devices to target.
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.75]{spectrum_dpdk}
-  \caption{DPDK's port abstraction limits portability by being too hardware
-  specific.}
+  \caption{DPDK's port abstraction on the spectrum.}
   \label{hardware:spectrum_dpdk}
 \end{figure}
 
@@ -94,7 +93,7 @@ mechanism provided by Netmap.
     \includegraphics[scale=0.9]{netmap_overview_b}
     \caption{Netmap gives direct access to hardware memory resources.}
   \end{subfigure}
-  \caption{Netmap patches the kernel to access network interface resources.}
+  \caption{Netmap driver functionality.}
   \label{hardware:netmap_overview}
 \end{figure}
 
@@ -112,7 +111,7 @@ functionality.
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.75]{spectrum_netmap}
-  \caption{Netmap ports are more portable, but lack low level control.}
+  \caption{Netmap's port abstraction on the spectrum.}
   \label{hardware:spectrum_netmap}
 \end{figure}
 
@@ -138,7 +137,7 @@ architectural models that can be constructed using ODP.
     \includegraphics[scale=0.9]{odp_overview_b}
     \caption{ODP and DPDK provide accelerated driver support to applications.}
   \end{subfigure}
-  \caption{ODP can use a variety of back ends to create different architectures.}
+  \caption{ODP framework.}
   \label{hardware:odp_overview}
 \end{figure}
 
@@ -153,8 +152,7 @@ virtualization-materialization spectrum.
 \begin{figure}[h!]
   \centering
   \includegraphics[scale=0.75]{spectrum_odp}
-  \caption{ODP's port abstraction strikes a good balance between portability
-  and performance.}
+  \caption{ODP's port abstraction on the spectrum.}
   \label{hardware:spectrum_odp}
 \end{figure}
 
